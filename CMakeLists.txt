@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.12.3)
 project(MorphologicalDisambiguation)
 
 set(CMAKE_CXX_STANDARD 17)
 include_directories(include)
 link_directories(library)
 
-add_library(MorphologicalDisambiguation DisambiguatedWord.cpp DisambiguatedWord.h DisambiguationCorpus.cpp DisambiguationCorpus.h AutoDisambiguator.h RootWordStatistics.cpp RootWordStatistics.h MorphologicalDisambiguator.h)
+add_library(MorphologicalDisambiguation DisambiguatedWord.cpp DisambiguatedWord.h DisambiguationCorpus.cpp DisambiguationCorpus.h AutoDisambiguator.h RootWordStatistics.cpp RootWordStatistics.h MorphologicalDisambiguator.h DummyDisambiguation.cpp DummyDisambiguation.h NaiveDisambiguation.cpp NaiveDisambiguation.h HmmDisambiguation.cpp HmmDisambiguation.h)
 
-target_link_libraries(MorphologicalDisambiguation Dictionary MorphologicalAnalysis Corpus)
+target_link_libraries(MorphologicalDisambiguation Dictionary MorphologicalAnalysis Corpus NGram)
