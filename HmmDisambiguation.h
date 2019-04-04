@@ -14,6 +14,7 @@ protected:
     NGram<string> igBiGramModel;
 public:
     void train(DisambiguationCorpus corpus) override;
+    vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) override;
 };
 
 
