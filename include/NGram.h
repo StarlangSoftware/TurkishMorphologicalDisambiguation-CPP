@@ -7,11 +7,12 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include "NGramNode.h"
 
 template <class Symbol> class NGram{
 private:
-    NGramNode<Symbol> rootNode = NGramNode<Symbol>();
+    NGramNode<Symbol>* rootNode = nullptr;
     int N = 0;
     double lambda1 = 0.0, lambda2 = 0.0;
     bool interpolated = false;
@@ -27,7 +28,8 @@ private:
     double getTriGramProbability(Symbol w1, Symbol w2, Symbol w3);
 public:
     NGram(vector<vector<Symbol>> corpus, int N);
-    NGram(int N);
+    explicit NGram(int N);
+    explicit NGram(ifstream &inputFile);
     void setN(int N);
     int getN();
     void addNGram(Symbol* symbols, int size);
@@ -47,9 +49,12 @@ public:
     int getCount(Symbol* symbols, int length);
     void setAdjustedProbability(double* countsOfCounts, int height, double pZero);
     ~NGram();
+    void serialize(ostream& outputFile);
+    void save(const string &fileName);
 };
 
 template<class Symbol> NGram<Symbol>::~NGram() {
+    delete rootNode;
     delete probabilityOfUnseen;
 }
 
@@ -64,6 +69,9 @@ template<class Symbol> NGram<Symbol>::NGram(vector<vector<Symbol>> corpus, int N
     int i;
     this->N = N;
     probabilityOfUnseen = new double[N];
+    for (int i = 0; i < N; i++){
+        probabilityOfUnseen[i] = 0.0;
+    }
     rootNode = NGramNode<Symbol>{};
     for (i = 0; i < corpus.size(); i++){
         Symbol* data = corpus.at(i).data();
@@ -79,7 +87,10 @@ template<class Symbol> NGram<Symbol>::NGram(vector<vector<Symbol>> corpus, int N
 template<class Symbol> NGram<Symbol>::NGram(int N) {
     this->N = N;
     probabilityOfUnseen = new double[N];
-    rootNode = NGramNode<Symbol>{};
+    for (int i = 0; i < N; i++){
+        probabilityOfUnseen[i] = 0.0;
+    }
+    rootNode = new NGramNode<Symbol>{};
 }
 
 /**
@@ -108,7 +119,7 @@ template<class Symbol> void NGram<Symbol>::addNGram(Symbol *symbols, int size) {
     for (int i = 0; i < size; i++){
         vocabulary.emplace(symbols[i]);
     }
-    rootNode.addNGram(symbols, 0, N);
+    rootNode->addNGram(symbols, 0, N);
 }
 
 /**
@@ -119,10 +130,10 @@ template<class Symbol> void NGram<Symbol>::addNGram(Symbol *symbols, int size) {
  */
 template<class Symbol> void NGram<Symbol>::addNGramSentence(Symbol *symbols, int size) {
     for (int i = 0; i < size; i++){
-        vocabulary.add(symbols[i]);
+        vocabulary.emplace(symbols[i]);
     }
     for (int j = 0; j < size - N + 1; j++){
-        rootNode.addNGram(symbols, j, N);
+        rootNode->addNGram(symbols, j, N);
     }
 }
 
@@ -175,7 +186,7 @@ template<class Symbol> void NGram<Symbol>::setProbabilityWithPseudoCount(double 
     } else {
         sizeOfVocabulary = vocabularySize();
     }
-    rootNode.setProbabilityWithPseudoCount(pseudoCount, height, sizeOfVocabulary);
+    rootNode->setProbabilityWithPseudoCount(pseudoCount, height, sizeOfVocabulary);
     probabilityOfUnseen[height - 1] = 1.0 / sizeOfVocabulary;
 }
 
@@ -185,7 +196,7 @@ template<class Symbol> void NGram<Symbol>::setProbabilityWithPseudoCount(double 
  * @param dictionary dictionary of known words.
  */
 template<class Symbol> void NGram<Symbol>::replaceUnknownWords(unordered_set <Symbol> dictionary) {
-    rootNode.replaceUnknownWords(dictionary);
+    rootNode->replaceUnknownWords(dictionary);
 }
 
 /**
@@ -199,7 +210,7 @@ template<class Symbol> void NGram<Symbol>::replaceUnknownWords(unordered_set <Sy
 template<class Symbol> unordered_set<Symbol> NGram<Symbol>::constructDictionaryWithNonRareWords(int level, double probability) {
     unordered_set<Symbol> result;
     CounterHashMap<Symbol> wordCounter;
-    rootNode.countWords(wordCounter, level);
+    rootNode->countWords(wordCounter, level);
     int sum = wordCounter.sumOfCounts();
     for (auto const& it : wordCounter){
         if (it.second / (sum + 0.0) > probability){
@@ -234,7 +245,7 @@ template<class Symbol> vector<int> NGram<Symbol>::calculateCountsOfCounts(int he
  * @return maximum occurrence in given height.
  */
 template<class Symbol> int NGram<Symbol>::maximumOccurrence(int height) {
-    return rootNode.maximumOccurrence(height);
+    return rootNode->maximumOccurrence(height);
 }
 
 /**
@@ -244,7 +255,7 @@ template<class Symbol> int NGram<Symbol>::maximumOccurrence(int height) {
  *                N-Gram is treated as Bigram, etc.
  */
 template<class Symbol> void NGram<Symbol>::updateCountsOfCounts(int* countsOfCounts, int height) {
-    rootNode.updateCountsOfCounts(countsOfCounts, height);
+    rootNode->updateCountsOfCounts(countsOfCounts, height);
 }
 
 /**
@@ -364,7 +375,7 @@ template<class Symbol> double NGram<Symbol>::getProbability(initializer_list<Sym
  * @return probability of given unigram.
  */
 template<class Symbol> double NGram<Symbol>::getUniGramProbability(Symbol w1) {
-    return rootNode.getUniGramProbability(w1);
+    return rootNode->getUniGramProbability(w1);
 }
 
 /**
@@ -375,7 +386,7 @@ template<class Symbol> double NGram<Symbol>::getUniGramProbability(Symbol w1) {
  */
 template<class Symbol> double NGram<Symbol>::getBiGramProbability(Symbol w1, Symbol w2) {
     try {
-        return rootNode.getBiGramProbability(w1, w2);
+        return rootNode->getBiGramProbability(w1, w2);
     } catch (UnseenCase& unseenCase) {
         return probabilityOfUnseen[1];
     }
@@ -390,7 +401,7 @@ template<class Symbol> double NGram<Symbol>::getBiGramProbability(Symbol w1, Sym
  */
 template<class Symbol> double NGram<Symbol>::getTriGramProbability(Symbol w1, Symbol w2, Symbol w3) {
     try {
-        return rootNode.getTriGramProbability(w1, w2, w3);
+        return rootNode->getTriGramProbability(w1, w2, w3);
     } catch (UnseenCase& unseenCase) {
         return probabilityOfUnseen[2];
     }
@@ -434,7 +445,7 @@ void NGram<Symbol>::calculateNGramProbabilities(void (*setProbabilities)(NGram<S
  * @return count of symbols.
  */
 template<class Symbol> int NGram<Symbol>::getCount(Symbol *symbols, int length) {
-    return rootNode.getCount(symbols, length, 0);
+    return rootNode->getCount(symbols, length, 0);
 }
 
 /**
@@ -446,8 +457,51 @@ template<class Symbol> int NGram<Symbol>::getCount(Symbol *symbols, int length) 
  */
 template<class Symbol>
 void NGram<Symbol>::setAdjustedProbability(double* countsOfCounts, int height, double pZero) {
-    rootNode.setAdjustedProbability(countsOfCounts, height, vocabularySize() + 1, pZero);
+    rootNode->setAdjustedProbability(countsOfCounts, height, vocabularySize() + 1, pZero);
     probabilityOfUnseen[height - 1] = 1.0 / (vocabularySize() + 1);
+}
+
+template<class Symbol> void NGram<Symbol>::serialize(ostream &outputFile) {
+    outputFile << N << " " << lambda1 << " " << lambda2 << "\n";
+    for (int i = 0; i < N; i++){
+        outputFile << probabilityOfUnseen[i] << " ";
+    }
+    outputFile << "\n";
+    outputFile << vocabularySize() << "\n";
+    for (auto & item : vocabulary){
+        outputFile << item << "\n";
+    }
+    rootNode->serialize(true, outputFile, 0);
+}
+
+/**
+ * Save this NGram to a file.
+ *
+ * @param fileName {@link String} name of file where NGram is saved.
+ */
+template<class Symbol> void NGram<Symbol>::save(const string &fileName){
+    ofstream outputFile;
+    outputFile.open(fileName, ofstream::out);
+    serialize(outputFile);
+    outputFile.close();
+}
+
+template<class Symbol>NGram<Symbol>::NGram(ifstream &inputFile) {
+    Symbol s;
+    int vocabularySize;
+    inputFile >> N;
+    inputFile >> lambda1;
+    inputFile >> lambda2;
+    probabilityOfUnseen = new double[N];
+    for (int i = 0; i < N; i++){
+        inputFile >> probabilityOfUnseen[i];
+    }
+    inputFile >> vocabularySize;
+    for (int i = 0; i < vocabularySize; i++){
+        inputFile >> s;
+        vocabulary.emplace(s);
+    }
+    rootNode = new NGramNode<Symbol>(true, inputFile);
 }
 
 #endif //NGRAM_NGRAM_H
