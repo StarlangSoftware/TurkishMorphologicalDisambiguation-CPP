@@ -147,3 +147,25 @@ RootFirstDisambiguation::getParseWithBestIgProbability(FsmParseList parseList, v
     }
     return bestParse;
 }
+
+void RootFirstDisambiguation::loadModel() {
+    NaiveDisambiguation::loadModel();
+    ifstream inputFile;
+    inputFile.open("words.2gram", istream::in);
+    wordBiGramModel = NGram<string>(inputFile);
+    inputFile.close();
+    inputFile.open("igs.2gram", istream::in);
+    igBiGramModel = NGram<string>(inputFile);
+    inputFile.close();
+}
+
+void RootFirstDisambiguation::saveModel() {
+    NaiveDisambiguation::saveModel();
+    ofstream outputFile;
+    outputFile.open("words.2gram", ostream::out);
+    wordBiGramModel.serialize(outputFile);
+    outputFile.close();
+    outputFile.open("igs.2gram", ostream::out);
+    igBiGramModel.serialize(outputFile);
+    outputFile.close();
+}

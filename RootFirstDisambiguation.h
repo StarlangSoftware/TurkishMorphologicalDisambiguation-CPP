@@ -19,6 +19,8 @@ protected:
 public:
     void train(DisambiguationCorpus corpus) override;
     vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) override;
+    void saveModel() override;
+    void loadModel() override;
 };
 
 

@@ -3,6 +3,7 @@
 //
 
 #include <FsmMorphologicalAnalyzer.h>
+#include "Model.h"
 #include "RootFirstClassifierDisambiguation.h"
 #include "BinaryAttribute.h"
 #include "DataSet.h"
@@ -196,4 +197,31 @@ vector<FsmParse> RootFirstClassifierDisambiguation::disambiguate(FsmParseList *f
         }
     }
     return correctFsmParses;
+}
+
+void RootFirstClassifierDisambiguation::saveModel() {
+    RootFirstDisambiguation::saveModel();
+    ofstream outputFile;
+    outputFile.open("classifiers.bin", ostream::out);
+    outputFile << models.size();
+    for (auto& model : models){
+        outputFile << model.first << "\n";
+        model.second->serialize(outputFile);
+    }
+    outputFile.close();
+}
+
+void RootFirstClassifierDisambiguation::loadModel() {
+    RootFirstDisambiguation::loadModel();
+    ifstream inputFile;
+    inputFile.open("classifiers.bin", istream::in);
+    int size;
+    inputFile >> size;
+    for (int i = 0; i < size; i++){
+        string modelName;
+        inputFile >> modelName;
+        Model* model = new Model(inputFile);
+        models.emplace(modelName, model);
+    }
+    inputFile.close();
 }

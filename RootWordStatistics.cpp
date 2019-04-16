@@ -55,3 +55,22 @@ string RootWordStatistics::bestRootWord(FsmParseList parseList, double threshold
     }
     return "";
 }
+
+void RootWordStatistics::serialize(ostream& outputFile) {
+    outputFile << statistics.size();
+    for (auto& iterator : statistics){
+        outputFile << iterator.first;
+        iterator.second.serialize(outputFile);
+    }
+}
+
+RootWordStatistics::RootWordStatistics(ifstream &inputFile) {
+    int size;
+    inputFile >> size;
+    for (int i = 0; i < size; i++){
+        string item;
+        inputFile >> item;
+        CounterHashMap<string> rootWordStatistics = CounterHashMap<string>(inputFile);
+        statistics.emplace(item, rootWordStatistics);
+    }
+}

@@ -15,11 +15,13 @@ class RootWordStatistics {
 private:
     map<string, CounterHashMap<string>> statistics;
 public:
+    explicit RootWordStatistics(ifstream& inputFile);
     RootWordStatistics();
     bool containsKey(string key);
     CounterHashMap<string> get(string key);
     void put(string key, CounterHashMap<string> wordStatistics);
     string bestRootWord(FsmParseList parseList, double threshold);
+    void serialize(ostream& outputFile);
 };
 
 
