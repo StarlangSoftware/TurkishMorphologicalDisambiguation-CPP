@@ -12,7 +12,7 @@ class Model {
 public:
     Model() = default;
     explicit Model(ifstream& inputFile) {};
-    virtual string predict(Instance* instance) {};
+    virtual string predict(Instance* instance) {return "";};
     virtual void serialize(ostream &outputFile) {};
 };
 
