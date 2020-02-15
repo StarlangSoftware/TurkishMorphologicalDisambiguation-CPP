@@ -67,7 +67,7 @@ string RootFirstClassifierDisambiguation::classificationProblem(string disambigu
                                                                 MorphologicalParse morphologicalParse) {
     vector<string> parses = Word::split(move(disambiguationProblem), "$");
     for (const auto &parse : parses) {
-        if (morphologicalParse.to_String().find(parse) != string::npos) {
+        if (morphologicalParse.to_string().find(parse) != string::npos) {
             return parse;
         }
     }

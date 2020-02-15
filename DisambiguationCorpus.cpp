@@ -73,7 +73,7 @@ void DisambiguationCorpus::writeToFile(string fileName) {
         outputFile << "<S>\t<S>+BSTag\n";
         for (int i = 0; i < sentence->wordCount(); i++) {
             auto* word = (DisambiguatedWord*) sentence->getWord(i);
-            outputFile << word->getName() + "\t" + word->getParse().to_String();
+            outputFile << word->getName() + "\t" + word->getParse().to_string();
         }
         outputFile << "</S>\t</S>+ESTag\n";
     }
