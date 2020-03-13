@@ -66,3 +66,84 @@ Result: The imported project is listed in the Project Explorer view and files ar
 **From IDE**
 
 After being done with the downloading and opening project, select **Build Project** option from **Build** menu.
+
+Detailed Description
+============
++ [Creating MorphologicalDisambiguator](#creating-morphologicaldisambiguator)
++ [Training MorphologicalDisambiguator](#training-morphologicaldisambiguator)
++ [Sentence Disambiguation](#sentence-disambiguation)
+
+## Creating MorphologicalDisambiguator 
+
+MorphologicalDisambiguator provides Turkish morphological disambiguation. There are possible disambiguation techniques. Depending on the technique used, disambiguator can be instantiated as follows:
+
+* Using `RootFirstDisambiguation`, Var olan analizlerden sadece kökü seçen
+
+        MorphologicalDisambiguator morphologicalDisambiguator = new RootFirstDisambiguation();
+
+* Using `LongestRootFirstDisambiguation`, Var olan analizlerden önce kökü en çok geçen kökü kullanarak seçen
+
+        MorphologicalDisambiguator morphologicalDisambiguator = new LongestRootFirstDisambiguation();
+
+* Using `HmmDisambiguation`, Var olan analizlerden Hmm tabanlı bir algoritma ile analizi seçen
+        
+        MorphologicalDisambiguator morphologicalDisambiguator = new HmmDisambiguation();
+
+* Using `DummyDisambiguation`, Var olan analizlerden rasgele birini seçen 
+     
+        MorphologicalDisambiguator morphologicalDisambiguator = new DummyDisambiguation();
+    
+
+## Training MorphologicalDisambiguator
+
+To train the disambiguator, an instance of `DisambiguationCorpus` object is needed. This can be instantiated and the disambiguator can be trained and saved as follows:
+
+    DisambiguationCorpus corpus = new DisambiguationCorpus("penn_treebank.txt");
+    morphologicalDisambiguator.train(corpus);
+    morphologicalDisambiguator.saveModel();
+    
+      
+## Sentence Disambiguation
+
+To disambiguate a sentence, a `FsmMorphologicalAnalyzer` instance is required. This can be created as below, further information can be found [here](https://github.com/olcaytaner/MorphologicalAnalysis/blob/master/README.md#creating-fsmmorphologicalanalyzer).
+
+    FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
+    
+A sentence can be disambiguated as follows: 
+    
+    Sentence sentence = new Sentence("Yarın doktora gidecekler");
+    FsmParseList[] fsmParseList = fsm.robustMorphologicalAnalysis(sentence);
+    System.out.println("All parses");
+    System.out.println("--------------------------");
+    for(int i = 0; i < fsmParseList.length; i++){
+        System.out.println(fsmParseList[i]);
+    }
+    ArrayList<FsmParse> candidateParses = morphologicalDisambiguator.disambiguate(fsmParseList);
+    System.out.println("Parses after disambiguation");
+    System.out.println("--------------------------");
+    for(int i = 0; i < candidateParses.size(); i++){
+        System.out.println(candidateParses.get(i));
+    }
+
+Output
+
+    
+    All parses
+    --------------------------
+    yar+NOUN+A3SG+P2SG+NOM
+    yar+NOUN+A3SG+PNON+GEN
+    yar+VERB+POS+IMP+A2PL
+    yarı+NOUN+A3SG+P2SG+NOM
+    yarın+NOUN+A3SG+PNON+NOM
+    
+    doktor+NOUN+A3SG+PNON+DAT
+    doktora+NOUN+A3SG+PNON+NOM
+    
+    git+VERB+POS+FUT+A3PL
+    git+VERB+POS^DB+NOUN+FUTPART+A3PL+PNON+NOM
+    
+    Parses after disambiguation
+    --------------------------
+    yarın+NOUN+A3SG+PNON+NOM
+    doktor+NOUN+A3SG+PNON+DAT
+    git+VERB+POS+FUT+A3PL
