@@ -14,18 +14,11 @@
  */
 vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) {
     vector<FsmParse> correctFsmParses;
-    int maxLength;
     FsmParse bestParse;
     for (int i = 0; i < size; i++) {
         FsmParseList fsmParseList = fsmParses[i];
-        maxLength = -1;
-        for (int j = 0; j < fsmParseList.size(); j++){
-            if (fsmParseList.getFsmParse(j).getWord()->getName().length() > maxLength){
-                maxLength = fsmParseList.getFsmParse(j).getWord()->getName().length();
-                bestParse = fsmParseList.getFsmParse(j);
-            }
-        }
-        if (maxLength != -1) {
+        if (fsmParseList.size() > 0) {
+            bestParse = fsmParseList.getParseWithLongestRootWord();
             correctFsmParses.emplace_back(bestParse);
         }
     }
