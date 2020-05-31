@@ -46,7 +46,7 @@ Use Git for cloning the code to your local or below line for Ubuntu:
 
 A directory called TurkishMorphologicalDisambiguation-CPP will be created. Or you can use below link for exploring the code:
 
-	git clone https://github.com/olcaytaner/TurkishMorphologicalDisambiguation-CPP.git
+	git clone https://github.com/starlangsoftware/TurkishMorphologicalDisambiguation-CPP.git
 
 ## Open project with CLion IDE
 
@@ -105,7 +105,7 @@ To train the disambiguator, an instance of `DisambiguationCorpus` object is need
       
 ## Sentence Disambiguation
 
-To disambiguate a sentence, a `FsmMorphologicalAnalyzer` instance is required. This can be created as below, further information can be found [here](https://github.com/olcaytaner/MorphologicalAnalysis/blob/master/README.md#creating-fsmmorphologicalanalyzer).
+To disambiguate a sentence, a `FsmMorphologicalAnalyzer` instance is required. This can be created as below, further information can be found [here](https://github.com/starlangsoftware/MorphologicalAnalysis/blob/master/README.md#creating-fsmmorphologicalanalyzer).
 
     FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer();
     
