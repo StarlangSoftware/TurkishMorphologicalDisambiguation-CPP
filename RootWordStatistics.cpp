@@ -48,10 +48,15 @@ void RootWordStatistics::put(string key, CounterHashMap<string> wordStatistics) 
  * @return The max value for the root word.
  */
 string RootWordStatistics::bestRootWord(FsmParseList parseList, double threshold) {
-    string rootWords = parseList.rootWords();
-    if (containsKey(rootWords)) {
-        CounterHashMap<string> rootWordStatistics = statistics.find(rootWords)->second;
-        return rootWordStatistics.max(threshold);
+    string surfaceForm = parseList.getFsmParse(0).getSurfaceForm();
+    if (containsKey(surfaceForm)) {
+        CounterHashMap<string> rootWordStatistics = statistics.find(surfaceForm)->second;
+        string rootWord = rootWordStatistics.max(threshold);
+        for (int i = 0; i < parseList.size(); i++){
+            if (parseList.getFsmParse(i).getWord()->getName() == rootWord){
+                return rootWord;
+            }
+        }
     }
     return "";
 }
