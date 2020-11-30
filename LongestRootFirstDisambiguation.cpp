@@ -3,6 +3,7 @@
 //
 
 #include "LongestRootFirstDisambiguation.h"
+#include "AutoDisambiguator.h"
 
 /**
  * The disambiguate method gets an array of fsmParses. Then loops through that parses and finds the longest root
@@ -17,10 +18,10 @@ vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmP
     FsmParse bestParse;
     for (int i = 0; i < size; i++) {
         FsmParseList fsmParseList = fsmParses[i];
-        if (fsmParseList.size() > 0) {
-            bestParse = fsmParseList.getParseWithLongestRootWord();
-            correctFsmParses.emplace_back(bestParse);
-        }
+        bestParse = fsmParseList.getParseWithLongestRootWord();
+        fsmParseList.reduceToParsesWithSameRoot(bestParse.getWord()->getName());
+        FsmParse newBestParse = AutoDisambiguator::caseDisambiguator(i, fsmParses, correctFsmParses, size);
+        correctFsmParses.emplace_back(bestParse);
     }
     return correctFsmParses;
 }

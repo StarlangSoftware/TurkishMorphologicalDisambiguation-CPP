@@ -3,6 +3,7 @@
 //
 
 #include "RootWordStatisticsDisambiguation.h"
+#include "AutoDisambiguator.h"
 
 void RootWordStatisticsDisambiguation::train(DisambiguationCorpus corpus) {
     ifstream inputFile;
@@ -14,17 +15,21 @@ void RootWordStatisticsDisambiguation::train(DisambiguationCorpus corpus) {
 vector<FsmParse> RootWordStatisticsDisambiguation::disambiguate(FsmParseList *fsmParses, int size) {
     vector<FsmParse> correctFsmParses;
     FsmParse bestParse;
+    string bestRoot;
     for (int i = 0; i < size; i++) {
         FsmParseList fsmParseList = fsmParses[i];
-        string bestRoot = rootWordStatistics.bestRootWord(fsmParseList, 0.0);
+        string rootWords = fsmParseList.rootWords();
+        if (rootWords.find('$') != std::string::npos){
+            bestRoot = rootWordStatistics.bestRootWord(fsmParseList, 0.0);
+            if (bestRoot.empty()){
+                bestRoot = fsmParseList.getParseWithLongestRootWord().getWord()->getName();
+            }
+        } else {
+            bestRoot = rootWords;
+        }
         if (!bestRoot.empty()){
             fsmParseList.reduceToParsesWithSameRoot(bestRoot);
-            FsmParse* newBestParse = fsmParseList.caseDisambiguator();
-            if (newBestParse != nullptr){
-                bestParse = *newBestParse;
-            } else {
-                bestParse = fsmParseList.getFsmParse(0);
-            }
+            bestParse = AutoDisambiguator::caseDisambiguator(i, fsmParses, correctFsmParses, size);
         } else {
             bestParse = fsmParseList.getFsmParse(0);
         }
