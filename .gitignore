@@ -56,3 +56,6 @@ cmake-build-debug/CMakeFiles/3.17.3/CompilerIdCXX/CMakeCXXCompilerId.cpp
 cmake-build-debug/CMakeFiles/MorphologicalDisambiguation.dir/LongestRootFirstDisambiguation.cpp.o
 cmake-build-debug/CMakeFiles/MorphologicalDisambiguation.dir/AutoDisambiguator.cpp.o
 cmake-build-debug/CMakeFiles/MorphologicalDisambiguation.dir/RootWordStatisticsDisambiguation.cpp.o
+/cmake-build-debug/Test
+/cmake-build-debug/CMakeFiles/Test.dir/Test/
+/cmake-build-debug/CMakeFiles/Test.dir/

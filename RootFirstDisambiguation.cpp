@@ -4,6 +4,7 @@
 
 #include "RootFirstDisambiguation.h"
 #include "DisambiguatedWord.h"
+#include "LaplaceSmoothing.h"
 
 /**
  * The train method initially creates new NGrams; wordUniGramModel, wordBiGramModel, igUniGramModel, and igBiGramModel. It gets the
@@ -22,6 +23,7 @@ void RootFirstDisambiguation::train(DisambiguationCorpus& corpus) {
     int i, j;
     Sentence* sentence;
     DisambiguatedWord* word;
+    LaplaceSmoothing <string> laplaceSmoothing;
     auto* words = new string[2];
     auto* igs = new string[2];
     wordUniGramModel = new NGram<string>(1);
@@ -44,6 +46,10 @@ void RootFirstDisambiguation::train(DisambiguationCorpus& corpus) {
             }
         }
     }
+    laplaceSmoothing.setProbabilities(*wordUniGramModel);
+    laplaceSmoothing.setProbabilities(*igUniGramModel);
+    laplaceSmoothing.setProbabilities(*wordBiGramModel);
+    laplaceSmoothing.setProbabilities(*igBiGramModel);
     delete[] words;
     delete[] igs;
 }

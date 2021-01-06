@@ -20,6 +20,7 @@ void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
     int i, j, k;
     Sentence* sentence;
     DisambiguatedWord* word, *nextWord;
+    LaplaceSmoothing <string> laplaceSmoothing;
     auto* words = new string[2];
     auto* igs = new string[2];
     wordUniGramModel = new NGram<string>(1);
@@ -44,6 +45,10 @@ void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
             }
         }
     }
+    laplaceSmoothing.setProbabilities(*wordUniGramModel);
+    laplaceSmoothing.setProbabilities(*igUniGramModel);
+    laplaceSmoothing.setProbabilities(*wordBiGramModel);
+    laplaceSmoothing.setProbabilities(*igBiGramModel);
     delete[] words;
     delete[] igs;
 }

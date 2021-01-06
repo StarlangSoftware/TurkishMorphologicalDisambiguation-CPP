@@ -20,7 +20,7 @@ TEST_CASE("RootWordStatisticsDisambiguationTest-testDisambiguation") {
         vector<FsmParse> fsmParses =  algorithm.disambiguate(sentenceAnalyses, corpus.getSentence(i)->wordCount());
         for (int j = 0; j < corpus.getSentence(i)->wordCount(); j++){
             auto* word = (DisambiguatedWord*) corpus.getSentence(i)->getWord(j);
-            if (Word::toLowerCase(fsmParses[j].getTransitionList()) == Word::toLowerCase(word->getParse().to_string())){
+            if (Word::toLowerCase(fsmParses[j].transitionlist()) == Word::toLowerCase(word->getParse().to_string())){
                 correctParse++;
                 correctRoot++;
             } else {
@@ -30,6 +30,6 @@ TEST_CASE("RootWordStatisticsDisambiguationTest-testDisambiguation") {
             }
         }
     }
-    REQUIRE_THAT(0.9729, Catch::Matchers::WithinAbs((correctRoot + 0.0) / corpus.numberOfWords(), 0.002));
-    REQUIRE_THAT(0.8868, Catch::Matchers::WithinAbs((correctParse + 0.0) / corpus.numberOfWords(), 0.002));
+    REQUIRE_THAT(0.9689, Catch::Matchers::WithinAbs((correctRoot + 0.0) / corpus.numberOfWords(), 0.002));
+    REQUIRE_THAT(0.8837, Catch::Matchers::WithinAbs((correctParse + 0.0) / corpus.numberOfWords(), 0.002));
 }

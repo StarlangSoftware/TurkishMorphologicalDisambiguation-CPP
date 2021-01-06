@@ -7,7 +7,7 @@
 
 void RootWordStatisticsDisambiguation::train(DisambiguationCorpus& corpus) {
     ifstream inputFile;
-    inputFile.open("penntrebank_statistics.txt", ifstream :: in);
+    inputFile.open("penntreebank_statistics.txt", ifstream :: in);
     rootWordStatistics = RootWordStatistics(inputFile);
     inputFile.close();
 }
