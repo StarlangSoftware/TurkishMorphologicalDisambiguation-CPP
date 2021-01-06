@@ -10,13 +10,14 @@
 
 class HmmDisambiguation : public NaiveDisambiguation {
 protected:
-    NGram<string> wordBiGramModel;
-    NGram<string> igBiGramModel;
+    NGram<string>* wordBiGramModel;
+    NGram<string>* igBiGramModel;
 public:
-    void train(DisambiguationCorpus corpus) override;
+    ~HmmDisambiguation();
+    void train(DisambiguationCorpus& corpus);
     vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) override;
-    void saveModel() override;
-    void loadModel() override;
+    void saveModel();
+    void loadModel();
 };
 
 

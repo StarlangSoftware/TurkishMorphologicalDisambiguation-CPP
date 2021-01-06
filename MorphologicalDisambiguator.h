@@ -9,8 +9,6 @@
 #ifndef MORPHOLOGICALDISAMBIGUATION_MORPHOLOGICALDISAMBIGUATOR_H
 #define MORPHOLOGICALDISAMBIGUATION_MORPHOLOGICALDISAMBIGUATOR_H
 
-#endif //MORPHOLOGICALDISAMBIGUATION_MORPHOLOGICALDISAMBIGUATOR_H
-
 class MorphologicalDisambiguator{
 public:
     /**
@@ -18,7 +16,7 @@ public:
      *
      * @param corpus {@link DisambiguationCorpus} to train.
      */
-    virtual void train(DisambiguationCorpus corpus) = 0;
+    void train(DisambiguationCorpus& corpus);
 
     /**
      * Method to disambiguate the given {@link FsmParseList}.
@@ -31,10 +29,12 @@ public:
     /**
      * Method to save a model.
      */
-    virtual void saveModel() = 0;
+    void saveModel();
 
     /**
      * Method to load a model.
      */
-    virtual void loadModel() = 0;
+    void loadModel();
 };
+
+#endif //MORPHOLOGICALDISAMBIGUATION_MORPHOLOGICALDISAMBIGUATOR_H

@@ -20,25 +20,26 @@ private:
     double probabilityOfUnseen = 0.0;
     NGramNode<Symbol>* unknown = nullptr;
     double childSum();
-    void updateCountsOfCounts(int* countsOfCounts, int height);
-    void setAdjustedProbability(double* N, int height, double vocabularySize, double pZero);
     void countWords(CounterHashMap<Symbol> wordCounter, int height);
     void replaceUnknownWords(unordered_set<Symbol> dictionary);
-    int getCount(Symbol* s, int length, int index);
 public:
     ~NGramNode();
     explicit NGramNode(Symbol symbol);
     NGramNode();
     NGramNode(bool isRootNode, istream &inputFile);
-    void addNGram(Symbol* s, int index, int height);
+    void addNGram(Symbol* s, int index, int height, int sentenceCount = 1);
     int getCount();
+    int getCount(Symbol* s, int length, int index);
     unsigned long size();
+    void updateCountsOfCounts(int* countsOfCounts, int height);
+    void setAdjustedProbability(double* N, int height, double vocabularySize, double pZero);
     void setProbabilityWithPseudoCount(double pseudoCount, int height, double vocabularySize);
     int maximumOccurrence(int height);
     Symbol generateNextString(vector<Symbol> s, int index);
     double getUniGramProbability(Symbol w1);
     double getBiGramProbability(Symbol w1, Symbol w2);
     double getTriGramProbability(Symbol w1, Symbol w2, Symbol w3);
+    void prune(double threshold, int N);
     void serialize(bool isRootNode, ostream &outputFile, int level);
 };
 
@@ -202,7 +203,7 @@ template<class Symbol> void NGramNode<Symbol>::setAdjustedProbability(double *N,
  * @param height height for NGram. if height = 1, If level = 1, N-Gram is treated as UniGram, if level = 2,
  *               N-Gram is treated as Bigram, etc.
  */
-template<class Symbol> void NGramNode<Symbol>::addNGram(Symbol *s, int index, int height) {
+template<class Symbol> void NGramNode<Symbol>::addNGram(Symbol *s, int index, int height, int sentenceCount) {
     NGramNode<Symbol>* child;
     if (height == 0){
         return;
@@ -214,8 +215,8 @@ template<class Symbol> void NGramNode<Symbol>::addNGram(Symbol *s, int index, in
         child = new NGramNode<Symbol>(symbol);
         children.emplace(symbol, child);
     }
-    child->count++;
-    child->addNGram(s, index + 1, height - 1);
+    child->count += sentenceCount;
+    child->addNGram(s, index + 1, height - 1, sentenceCount);
 }
 
 /**
@@ -337,7 +338,7 @@ template<class Symbol> void NGramNode<Symbol>::replaceUnknownWords(unordered_set
 template<class Symbol> int NGramNode<Symbol>::getCount(Symbol *s, int length, int index) {
     if (index < length){
         if (children.find(s[index]) != children.end()){
-            return children.find(s[index]).second.getCount(s, index + 1);
+            return children.find(s[index])->second->getCount(s, length, index + 1);
         } else {
             return 0;
         }
@@ -412,4 +413,34 @@ template<class Symbol> NGramNode<Symbol>::NGramNode(bool isRootNode, istream &in
         children.emplace(childNode->symbol, childNode);
     }
 }
+
+template<class Symbol> void NGramNode<Symbol>::prune(double threshold, int N) {
+    if (N == 0){
+        Symbol maxElement = Symbol();
+        NGramNode<Symbol>* maxNode = nullptr;
+        vector<Symbol> toBeDeleted;
+        for (auto const& it : children){
+            NGramNode<Symbol>* node = it.second;
+            if (node->count / (count + 0.0) < threshold){
+                toBeDeleted.emplace_back(it.first);
+            }
+            if (maxElement == Symbol() || node->count > children[maxElement]->count){
+                maxElement = it.first;
+                maxNode = node;
+            }
+        }
+        for (Symbol symbol1 : toBeDeleted){
+            children.erase(symbol1);
+        }
+        if (children.size() == 0){
+            children[maxElement] = maxNode;
+        }
+    } else {
+        for (auto const& it : children){
+            NGramNode<Symbol>* node = it.second;
+            node->prune(threshold, N - 1);
+        }
+    }
+}
+
 #endif //NGRAM_NGRAMNODE_H

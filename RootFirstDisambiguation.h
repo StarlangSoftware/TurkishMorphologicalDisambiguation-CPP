@@ -10,17 +10,18 @@
 
 class RootFirstDisambiguation : public NaiveDisambiguation {
 protected:
-    NGram<string> wordBiGramModel = NGram<string>(0);
-    NGram<string> igBiGramModel = NGram<string>(0);
+    NGram<string>* wordBiGramModel;
+    NGram<string>* igBiGramModel;
     double getWordProbability(string word, vector<FsmParse> correctFsmParses, int index);
     double getIgProbability(string word, vector<FsmParse> correctFsmParses, int index);
     Word* getBestRootWord(FsmParseList fsmParseList);
     FsmParse getParseWithBestIgProbability(FsmParseList parseList, vector<FsmParse> correctFsmParses, int index);
 public:
-    void train(DisambiguationCorpus corpus) override;
+    ~RootFirstDisambiguation();
+    void train(DisambiguationCorpus& corpus);
     vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) override;
-    void saveModel() override;
-    void loadModel() override;
+    void saveModel();
+    void loadModel();
 };
 
 

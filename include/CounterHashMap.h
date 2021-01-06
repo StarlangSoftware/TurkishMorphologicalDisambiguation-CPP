@@ -139,7 +139,7 @@ template<class K> K CounterHashMap<K>::max(double threshold) {
     if (maxCount / (total + 0.0) > threshold) {
         return maxKey;
     } else {
-        return nullptr;
+        return K();
     }
 }
 
@@ -149,7 +149,7 @@ template<class K> K CounterHashMap<K>::max(double threshold) {
  * @param toBeAdded CounterHashMap to be added to this counterHashMap.
  */
 template<class K> void CounterHashMap<K>::add(CounterHashMap<K> toBeAdded) {
-    for (auto item = this->begin(); item != this->end(); item++){
+    for (auto item = toBeAdded.begin(); item != toBeAdded.end(); item++){
         putNTimes(item->first, toBeAdded.find(item->first)->second);
     }
 }
@@ -165,7 +165,7 @@ template<class K> void CounterHashMap<K>::add(CounterHashMap<K> toBeAdded) {
 template<class K> vector<pair<K, int>> CounterHashMap<K>::topN(int N) {
     vector<pair<K, int>> result;
     for (auto item = this->begin(); item != this->end(); item++) {
-        result.push_back(item);
+        result.emplace_back(*item);
     }
     sort(result.begin(), result.end(),
          [](pair<K, int> o1, pair<K, int> o2) -> bool

@@ -16,16 +16,16 @@
  *
  * @param corpus {@link DisambiguationCorpus} to train.
  */
-void HmmDisambiguation::train(DisambiguationCorpus corpus) {
+void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
     int i, j, k;
     Sentence* sentence;
     DisambiguatedWord* word, *nextWord;
     auto* words = new string[2];
     auto* igs = new string[2];
-    wordUniGramModel = NGram<string>(1);
-    igUniGramModel = NGram<string>(1);
-    wordBiGramModel = NGram<string>(2);
-    igBiGramModel = NGram<string>(2);
+    wordUniGramModel = new NGram<string>(1);
+    igUniGramModel = new NGram<string>(1);
+    wordBiGramModel = new NGram<string>(2);
+    igBiGramModel = new NGram<string>(2);
     for (i = 0; i < corpus.sentenceCount(); i++) {
         sentence = corpus.getSentence(i);
         for (j = 0; j < sentence->wordCount() - 1; j++) {
@@ -33,14 +33,14 @@ void HmmDisambiguation::train(DisambiguationCorpus corpus) {
             nextWord = (DisambiguatedWord*) sentence->getWord(j + 1);
             words[0] = word->getParse().getWordWithPos()->getName();
             words[1] = nextWord->getParse().getWordWithPos()->getName();
-            wordUniGramModel.addNGram(words, 2);
-            wordBiGramModel.addNGram(words, 2);
+            wordUniGramModel->addNGram(words, 2);
+            wordBiGramModel->addNGram(words, 2);
             for (k = 0; k < nextWord->getParse().size(); k++) {
                 igs[0] = word->getParse().getLastInflectionalGroup().to_String();
                 igs[1] = nextWord->getParse().getInflectionalGroup(k).to_String();
-                igBiGramModel.addNGram(igs, 2);
+                igBiGramModel->addNGram(igs, 2);
                 igs[0] = igs[1];
-                igUniGramModel.addNGram(igs, 2);
+                igUniGramModel->addNGram(igs, 2);
             }
         }
     }
@@ -75,10 +75,10 @@ vector<FsmParse> HmmDisambiguation::disambiguate(FsmParseList *fsmParses, int si
     for (i = 0; i < fsmParses[0].size(); i++) {
         FsmParse currentParse = fsmParses[0].getFsmParse(i);
         w1 = currentParse.getWordWithPos()->getName();
-        probability = wordUniGramModel.getProbability({w1});
+        probability = wordUniGramModel->getProbability({w1});
         for (j = 0; j < currentParse.size(); j++) {
             ig1 = currentParse.getInflectionalGroup(j).to_String();
-            probability *= igUniGramModel.getProbability({ig1});
+            probability *= igUniGramModel->getProbability({ig1});
         }
         probabilities[0][i] = log(probability);
     }
@@ -91,11 +91,11 @@ vector<FsmParse> HmmDisambiguation::disambiguate(FsmParseList *fsmParses, int si
                 FsmParse previousParse = fsmParses[i - 1].getFsmParse(k);
                 w1 = previousParse.getWordWithPos()->getName();
                 w2 = currentParse.getWordWithPos()->getName();
-                probability = probabilities[i - 1][k] + log(wordBiGramModel.getProbability({w1, w2}));
+                probability = probabilities[i - 1][k] + log(wordBiGramModel->getProbability({w1, w2}));
                 for (t = 0; t < fsmParses[i].getFsmParse(j).size(); t++) {
                     ig1 = previousParse.lastInflectionalGroup().to_String();
                     ig2 = currentParse.getInflectionalGroup(t).to_String();
-                    probability += log(igBiGramModel.getProbability({ig1, ig2}));
+                    probability += log(igBiGramModel->getProbability({ig1, ig2}));
                 }
                 if (probability > bestProbability) {
                     bestIndex = k;
@@ -132,10 +132,10 @@ void HmmDisambiguation::loadModel() {
     NaiveDisambiguation::loadModel();
     ifstream inputFile;
     inputFile.open("words.2gram", istream::in);
-    wordBiGramModel = NGram<string>(inputFile);
+    wordBiGramModel = new NGram<string>(inputFile);
     inputFile.close();
     inputFile.open("igs.2gram", istream::in);
-    igBiGramModel = NGram<string>(inputFile);
+    igBiGramModel = new NGram<string>(inputFile);
     inputFile.close();
 }
 
@@ -143,9 +143,14 @@ void HmmDisambiguation::saveModel() {
     NaiveDisambiguation::saveModel();
     ofstream outputFile;
     outputFile.open("words.2gram", ostream::out);
-    wordBiGramModel.serialize(outputFile);
+    wordBiGramModel->serialize(outputFile);
     outputFile.close();
     outputFile.open("igs.2gram", ostream::out);
-    igBiGramModel.serialize(outputFile);
+    igBiGramModel->serialize(outputFile);
     outputFile.close();
+}
+
+HmmDisambiguation::~HmmDisambiguation() {
+    delete wordBiGramModel;
+    delete igBiGramModel;
 }

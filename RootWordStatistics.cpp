@@ -79,3 +79,17 @@ RootWordStatistics::RootWordStatistics(ifstream &inputFile) {
         statistics.emplace(item, rootWordStatistics);
     }
 }
+
+RootWordStatistics::RootWordStatistics(string fileName) {
+    ifstream inputFile;
+    inputFile.open(fileName, ifstream::in);
+    int size;
+    inputFile >> size;
+    for (int i = 0; i < size; i++){
+        string item;
+        inputFile >> item;
+        CounterHashMap<string> rootWordStatistics = CounterHashMap<string>(inputFile);
+        statistics.emplace(item, rootWordStatistics);
+    }
+    inputFile.close();
+}

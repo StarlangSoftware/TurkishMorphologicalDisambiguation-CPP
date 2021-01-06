@@ -19,9 +19,9 @@ vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmP
     for (int i = 0; i < size; i++) {
         FsmParseList fsmParseList = fsmParses[i];
         bestParse = fsmParseList.getParseWithLongestRootWord();
-        fsmParseList.reduceToParsesWithSameRoot(bestParse.getWord()->getName());
+        fsmParses[i].reduceToParsesWithSameRoot(bestParse.getWord()->getName());
         FsmParse newBestParse = AutoDisambiguator::caseDisambiguator(i, fsmParses, correctFsmParses, size);
-        correctFsmParses.emplace_back(bestParse);
+        correctFsmParses.emplace_back(newBestParse);
     }
     return correctFsmParses;
 }

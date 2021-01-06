@@ -18,29 +18,29 @@
  *
  * @param corpus {@link DisambiguationCorpus} to train.
  */
-void RootFirstDisambiguation::train(DisambiguationCorpus corpus) {
+void RootFirstDisambiguation::train(DisambiguationCorpus& corpus) {
     int i, j;
     Sentence* sentence;
     DisambiguatedWord* word;
     auto* words = new string[2];
     auto* igs = new string[2];
-    wordUniGramModel = NGram<string>(1);
-    wordBiGramModel = NGram<string>(2);
-    igUniGramModel = NGram<string>(1);
-    igBiGramModel = NGram<string>(2);
+    wordUniGramModel = new NGram<string>(1);
+    wordBiGramModel = new NGram<string>(2);
+    igUniGramModel = new NGram<string>(1);
+    igBiGramModel = new NGram<string>(2);
     for (i = 0; i < corpus.sentenceCount(); i++) {
         sentence = corpus.getSentence(i);
         for (j = 0; j < sentence->wordCount(); j++) {
             word = (DisambiguatedWord*) sentence->getWord(j);
             words[0] = word->getParse().getWordWithPos()->getName();
-            wordUniGramModel.addNGram(words, 2);
+            wordUniGramModel->addNGram(words, 2);
             igs[0] = word->getParse().getTransitionList();
-            igUniGramModel.addNGram(igs, 2);
+            igUniGramModel->addNGram(igs, 2);
             if (j + 1 < sentence->wordCount()) {
                 words[1] = ((DisambiguatedWord*) sentence->getWord(j + 1))->getParse().getWordWithPos()->getName();
-                wordBiGramModel.addNGram(words, 2);
+                wordBiGramModel->addNGram(words, 2);
                 igs[1] = ((DisambiguatedWord*) sentence->getWord(j + 1))->getParse().getTransitionList();
-                igBiGramModel.addNGram(igs, 2);
+                igBiGramModel->addNGram(igs, 2);
             }
         }
     }
@@ -74,9 +74,9 @@ vector<FsmParse> RootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, 
  */
 double RootFirstDisambiguation::getWordProbability(string word, vector<FsmParse> correctFsmParses, int index) {
     if (index != 0 && correctFsmParses.size() == index) {
-        return wordBiGramModel.getProbability({correctFsmParses.at(index - 1).getWordWithPos()->getName(), word});
+        return wordBiGramModel->getProbability({correctFsmParses.at(index - 1).getWordWithPos()->getName(), word});
     } else {
-        return wordUniGramModel.getProbability({word});
+        return wordUniGramModel->getProbability({word});
     }
 }
 
@@ -90,9 +90,9 @@ double RootFirstDisambiguation::getWordProbability(string word, vector<FsmParse>
  */
 double RootFirstDisambiguation::getIgProbability(string word, vector<FsmParse> correctFsmParses, int index) {
     if (index != 0 && correctFsmParses.size() == index) {
-        return igBiGramModel.getProbability({correctFsmParses.at(index - 1).getTransitionList(), word});
+        return igBiGramModel->getProbability({correctFsmParses.at(index - 1).getTransitionList(), word});
     } else {
-        return igUniGramModel.getProbability({word});
+        return igUniGramModel->getProbability({word});
     }
 }
 
@@ -111,8 +111,8 @@ Word* RootFirstDisambiguation::getBestRootWord(FsmParseList fsmParseList) {
     for (int j = 0; j < fsmParseList.size(); j++) {
         string word = fsmParseList.getFsmParse(j).getWordWithPos()->getName();
         string ig = fsmParseList.getFsmParse(j).getTransitionList();
-        double wordProbability = wordUniGramModel.getProbability({word});
-        double igProbability = igUniGramModel.getProbability({ig});
+        double wordProbability = wordUniGramModel->getProbability({word});
+        double igProbability = igUniGramModel->getProbability({ig});
         probability = wordProbability * igProbability;
         if (probability > bestProbability) {
             bestWord = fsmParseList.getFsmParse(j).getWordWithPos();
@@ -152,10 +152,10 @@ void RootFirstDisambiguation::loadModel() {
     NaiveDisambiguation::loadModel();
     ifstream inputFile;
     inputFile.open("words.2gram", istream::in);
-    wordBiGramModel = NGram<string>(inputFile);
+    wordBiGramModel = new NGram<string>(inputFile);
     inputFile.close();
     inputFile.open("igs.2gram", istream::in);
-    igBiGramModel = NGram<string>(inputFile);
+    igBiGramModel = new NGram<string>(inputFile);
     inputFile.close();
 }
 
@@ -163,9 +163,14 @@ void RootFirstDisambiguation::saveModel() {
     NaiveDisambiguation::saveModel();
     ofstream outputFile;
     outputFile.open("words.2gram", ostream::out);
-    wordBiGramModel.serialize(outputFile);
+    wordBiGramModel->serialize(outputFile);
     outputFile.close();
     outputFile.open("igs.2gram", ostream::out);
-    igBiGramModel.serialize(outputFile);
+    igBiGramModel->serialize(outputFile);
     outputFile.close();
+}
+
+RootFirstDisambiguation::~RootFirstDisambiguation() {
+    delete wordBiGramModel;
+    delete igBiGramModel;
 }

@@ -11,11 +11,12 @@
 
 class NaiveDisambiguation : public MorphologicalDisambiguator {
 protected:
-    NGram<string> wordUniGramModel = NGram<string>(0);
-    NGram<string> igUniGramModel = NGram<string>(0);
+    NGram<string>* wordUniGramModel;
+    NGram<string>* igUniGramModel;
 public:
-    void saveModel() override;
-    void loadModel() override;
+    ~NaiveDisambiguation();
+    void saveModel();
+    void loadModel();
 };
 
 

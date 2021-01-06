@@ -14,7 +14,7 @@ public:
     static const string SEPARATORS;
     static const string SENTENCE_ENDERS;
     static const string PUNCTUATION_CHARACTERS;
-    virtual vector<Sentence> split(string line) = 0;
+    virtual vector<Sentence*> split(string line) = 0;
 };
 
 const inline string SentenceSplitter::SEPARATORS = "()[]{}\"'\u05F4\uFF02\u055B";

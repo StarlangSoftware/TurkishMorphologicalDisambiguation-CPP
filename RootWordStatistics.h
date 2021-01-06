@@ -16,6 +16,7 @@ private:
     map<string, CounterHashMap<string>> statistics;
 public:
     explicit RootWordStatistics(ifstream& inputFile);
+    explicit RootWordStatistics(string fileName);
     RootWordStatistics();
     bool containsKey(string key);
     CounterHashMap<string> get(string key);

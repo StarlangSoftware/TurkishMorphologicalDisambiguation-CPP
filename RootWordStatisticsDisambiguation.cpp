@@ -5,7 +5,7 @@
 #include "RootWordStatisticsDisambiguation.h"
 #include "AutoDisambiguator.h"
 
-void RootWordStatisticsDisambiguation::train(DisambiguationCorpus corpus) {
+void RootWordStatisticsDisambiguation::train(DisambiguationCorpus& corpus) {
     ifstream inputFile;
     inputFile.open("penntrebank_statistics.txt", ifstream :: in);
     rootWordStatistics = RootWordStatistics(inputFile);
@@ -28,7 +28,7 @@ vector<FsmParse> RootWordStatisticsDisambiguation::disambiguate(FsmParseList *fs
             bestRoot = rootWords;
         }
         if (!bestRoot.empty()){
-            fsmParseList.reduceToParsesWithSameRoot(bestRoot);
+            fsmParses[i].reduceToParsesWithSameRoot(bestRoot);
             bestParse = AutoDisambiguator::caseDisambiguator(i, fsmParses, correctFsmParses, size);
         } else {
             bestParse = fsmParseList.getFsmParse(0);

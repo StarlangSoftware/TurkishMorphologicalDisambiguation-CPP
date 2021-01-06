@@ -16,6 +16,7 @@
 class Corpus {
 protected:
     vector<Sentence*> sentences;
+    vector<Paragraph> paragraphs;
     CounterHashMap<Word> wordList;
     string fileName;
 public:
@@ -36,6 +37,8 @@ public:
     int getCount(Word word);
     int sentenceCount();
     Sentence* getSentence(int index);
+    int paragraphCount();
+    Paragraph getParagraph(int index);
     int maxSentenceLength();
     vector<vector<Word*>> getAllWordsAsVector();
     void shuffleSentences(int seed);

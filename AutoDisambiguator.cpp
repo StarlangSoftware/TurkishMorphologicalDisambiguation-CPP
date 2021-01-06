@@ -1205,7 +1205,8 @@ string AutoDisambiguator::selectCaseForParseString(string parseString, int index
 FsmParse
 AutoDisambiguator::caseDisambiguator(int index, FsmParseList *fsmParses, vector<FsmParse> correctParses, int length) {
     FsmParseList fsmParseList = fsmParses[index];
-    string defaultCase = selectCaseForParseString(fsmParses[index].parsesWithoutPrefixAndSuffix(), index, fsmParses, correctParses, length);
+    string caseString = fsmParses[index].parsesWithoutPrefixAndSuffix();
+    string defaultCase = selectCaseForParseString(caseString, index, fsmParses, correctParses, length);
     if (!defaultCase.empty()) {
         for (int i = 0; i < fsmParseList.size(); i++) {
             FsmParse fsmParse = fsmParseList.getFsmParse(i);

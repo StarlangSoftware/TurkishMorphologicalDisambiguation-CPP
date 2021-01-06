@@ -16,7 +16,7 @@ class RootWordStatisticsDisambiguation : public MorphologicalDisambiguator{
 private:
     RootWordStatistics rootWordStatistics;
 public:
-    void train(DisambiguationCorpus corpus) override;
+    void train(DisambiguationCorpus& corpus);
     vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) override;
 };
 
