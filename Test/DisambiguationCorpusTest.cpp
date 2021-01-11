@@ -7,6 +7,6 @@
 
 TEST_CASE("DisambiguationCorpusTest-testCorpus") {
     DisambiguationCorpus corpus = DisambiguationCorpus("penntreebank.txt");
-    REQUIRE(19109 == corpus.sentenceCount());
+    REQUIRE(19108 == corpus.sentenceCount());
     REQUIRE(170211 == corpus.numberOfWords());
 }

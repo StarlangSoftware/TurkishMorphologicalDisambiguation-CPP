@@ -59,3 +59,5 @@ cmake-build-debug/CMakeFiles/MorphologicalDisambiguation.dir/RootWordStatisticsD
 /cmake-build-debug/Test
 /cmake-build-debug/CMakeFiles/Test.dir/Test/
 /cmake-build-debug/CMakeFiles/Test.dir/
+/cmake-build-debug/CMakeFiles/MorphologicalDisambiguation.dir/AutoProcessor/Sentence/
+/cmake-build-debug/CMakeFiles/MorphologicalDisambiguation.dir/AutoProcessor/ParseTree/PartOfSpeech/
