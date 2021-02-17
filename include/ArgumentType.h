@@ -21,7 +21,8 @@ enum class ArgumentType {
  * @param argumentsType  Type of the argument in string form
  * @return Type of the argument in {@link ArgumentType} form
  */
-static ArgumentType getArguments(const string &argumentsType){
+static ArgumentType getArguments(string argumentsType){
+    std::transform(argumentsType.begin(), argumentsType.end(), argumentsType.begin(), [](unsigned char c){ return std::toupper(c); });
     if (argumentsType.empty()){
         return ArgumentType::NONE;
     } else {
