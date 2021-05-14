@@ -6,7 +6,7 @@
 #define MORPHOLOGICALDISAMBIGUATION_DISAMBIGUATEDWORD_H
 
 #include <Word.h>
-#include <MorphologicalParse.h>
+#include "MorphologicalParse.h"
 
 class DisambiguatedWord : public Word {
 private:

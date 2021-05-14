@@ -5,7 +5,7 @@
 #include <FsmMorphologicalAnalyzer.h>
 #include "catch.hpp"
 #include "../DummyDisambiguation.h"
-#include "../DisambiguatedWord.h"
+#include "DisambiguatedWord.h"
 #include "../HmmDisambiguation.h"
 
 TEST_CASE("HmmDisambiguationTest-testDisambiguation") {

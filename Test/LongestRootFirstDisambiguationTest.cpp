@@ -4,8 +4,8 @@
 
 #include <FsmMorphologicalAnalyzer.h>
 #include "catch.hpp"
-#include "../DisambiguatedWord.h"
-#include "../DisambiguationCorpus.h"
+#include "DisambiguatedWord.h"
+#include "DisambiguationCorpus.h"
 #include "../LongestRootFirstDisambiguation.h"
 
 TEST_CASE("LongestRootFirstDisambiguationTest-testDisambiguation") {

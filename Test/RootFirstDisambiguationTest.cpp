@@ -4,9 +4,9 @@
 
 #include <FsmMorphologicalAnalyzer.h>
 #include "catch.hpp"
-#include "../DisambiguationCorpus.h"
+#include "DisambiguationCorpus.h"
 #include "../RootFirstDisambiguation.h"
-#include "../DisambiguatedWord.h"
+#include "DisambiguatedWord.h"
 
 TEST_CASE("RootFirstDisambiguationTest-testDisambiguation") {
     FsmMorphologicalAnalyzer fsm = FsmMorphologicalAnalyzer();
