@@ -31,7 +31,7 @@ protected:
     virtual void autoDisambiguateMultipleRootWords(AnnotatedSentence* sentence) = 0;
 
 public:
-    SentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer, RootWordStatistics& rootWordStatistics);
+    SentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer);
     void autoDisambiguate(AnnotatedSentence* sentence);
 };
 

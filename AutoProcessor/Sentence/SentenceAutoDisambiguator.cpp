@@ -12,10 +12,8 @@
  * @param rootWordStatistics The object contains information about the selected correct root words in a corpus for a set
  *                           of possible lemma. Root word statistics can be used to distinguish between possible root words.
  */
-SentenceAutoDisambiguator::SentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer,
-                                                     RootWordStatistics& rootWordStatistics) {
+SentenceAutoDisambiguator::SentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer) {
     this->morphologicalAnalyzer = morphologicalAnalyzer;
-    this->rootWordStatistics = rootWordStatistics;
 }
 
 /**

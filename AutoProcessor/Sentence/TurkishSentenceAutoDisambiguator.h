@@ -7,15 +7,15 @@
 
 
 #include "SentenceAutoDisambiguator.h"
-#include "../../RootWordStatisticsDisambiguation.h"
+#include "../../LongestRootFirstDisambiguation.h"
 
 class TurkishSentenceAutoDisambiguator : public SentenceAutoDisambiguator{
 public:
-    TurkishSentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer, RootWordStatistics& rootWordStatistics);
+    TurkishSentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer);
 protected:
     void autoDisambiguateMultipleRootWords(AnnotatedSentence* sentence) override;
 private:
-    RootWordStatisticsDisambiguation rootWordStatisticsDisambiguation;
+    LongestRootFirstDisambiguation longestRootFirstDisambiguation;
     void setParseAutomatically(FsmParse disambiguatedParse, AnnotatedWord* word);
 };
 

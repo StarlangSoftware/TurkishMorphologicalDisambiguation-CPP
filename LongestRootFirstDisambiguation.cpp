@@ -18,10 +18,48 @@ vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmP
     FsmParse bestParse;
     for (int i = 0; i < size; i++) {
         FsmParseList fsmParseList = fsmParses[i];
-        bestParse = fsmParseList.getParseWithLongestRootWord();
-        fsmParses[i].reduceToParsesWithSameRoot(bestParse.getWord()->getName());
+        string bestRoot;
+        string surfaceForm = fsmParseList.getFsmParse(0).getSurfaceForm();
+        if (rootList.find(surfaceForm) != rootList.end()){
+            bestRoot = rootList[surfaceForm];
+        }
+        bool rootFound = false;
+        for (int j = 0; j < fsmParseList.size(); j++) {
+            if (fsmParseList.getFsmParse(j).getWord()->getName() == bestRoot) {
+                rootFound = true;
+                break;
+            }
+        }
+        if (!rootFound){
+            bestParse = fsmParseList.getParseWithLongestRootWord();
+            fsmParses[i].reduceToParsesWithSameRoot(bestParse.getWord()->getName());
+        } else {
+            fsmParses[i].reduceToParsesWithSameRoot(bestRoot);
+        }
         FsmParse newBestParse = AutoDisambiguator::caseDisambiguator(i, fsmParses, correctFsmParses, size);
         correctFsmParses.emplace_back(newBestParse);
     }
     return correctFsmParses;
+}
+
+LongestRootFirstDisambiguation::LongestRootFirstDisambiguation() {
+    readFromFile("rootList.txt");
+}
+
+LongestRootFirstDisambiguation::LongestRootFirstDisambiguation(string fileName) {
+    readFromFile(fileName);
+}
+
+void LongestRootFirstDisambiguation::readFromFile(string fileName) {
+    ifstream inputFile;
+    string line;
+    inputFile.open(fileName, ifstream :: in);
+    while (inputFile.good()) {
+        getline(inputFile, line);
+        vector<string> tokens = Word::split(line);
+        if (tokens.size() == 2) {
+            rootList.insert_or_assign(tokens[0], tokens[1]);
+        }
+    }
+    inputFile.close();
 }

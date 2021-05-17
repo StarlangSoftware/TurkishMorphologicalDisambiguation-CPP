@@ -6,12 +6,10 @@
 #define MORPHOLOGICALDISAMBIGUATION_AUTODISAMBIGUATOR_H
 
 #include "FsmMorphologicalAnalyzer.h"
-#include "RootWordStatistics.h"
 
 class AutoDisambiguator {
 protected:
     FsmMorphologicalAnalyzer morphologicalAnalyzer;
-    RootWordStatistics rootWordStatistics;
 private:
     static bool isAnyWordSecondPerson(int index, vector<FsmParse> correctParses);
     static bool isPossessivePlural(int index, vector<FsmParse> correctParses);

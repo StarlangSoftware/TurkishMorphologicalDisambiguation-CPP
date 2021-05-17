@@ -4,6 +4,7 @@
 
 #include "AutoDisambiguator.h"
 #include "Word.h"
+#include "CounterHashMap.h"
 
 bool AutoDisambiguator::isAnyWordSecondPerson(int index, vector<FsmParse> correctParses) {
     int count = 0;

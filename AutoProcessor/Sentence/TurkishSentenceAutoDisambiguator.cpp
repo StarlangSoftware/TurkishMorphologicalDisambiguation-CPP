@@ -11,7 +11,7 @@
  *                           `günü': 2 possible root words `gün' and `günü'
  *                           `çağlar' : 2 possible root words `çağ' and `çağlar'
  */
-TurkishSentenceAutoDisambiguator::TurkishSentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer, RootWordStatistics& rootWordStatistics) : SentenceAutoDisambiguator(morphologicalAnalyzer, rootWordStatistics) {
+TurkishSentenceAutoDisambiguator::TurkishSentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer) : SentenceAutoDisambiguator(morphologicalAnalyzer) {
 }
 
 /**
@@ -35,7 +35,7 @@ void TurkishSentenceAutoDisambiguator::setParseAutomatically(FsmParse disambigua
  */
 void TurkishSentenceAutoDisambiguator::autoDisambiguateMultipleRootWords(AnnotatedSentence* sentence) {
     FsmParseList* fsmParses = morphologicalAnalyzer.robustMorphologicalAnalysis(*sentence);
-    vector<FsmParse> correctParses = rootWordStatisticsDisambiguation.disambiguate(fsmParses, sentence->wordCount());
+    vector<FsmParse> correctParses = longestRootFirstDisambiguation.disambiguate(fsmParses, sentence->wordCount());
     for (int i = 0; i < sentence->wordCount(); i++){
         auto* word = (AnnotatedWord*) sentence->getWord(i);
         if (word->getParse() == nullptr){

@@ -2,6 +2,8 @@
 // Created by Olcay Taner YILDIZ on 6.01.2021.
 //
 
+#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
+
 #include <FsmMorphologicalAnalyzer.h>
 #include "catch.hpp"
 #include "../DummyDisambiguation.h"
