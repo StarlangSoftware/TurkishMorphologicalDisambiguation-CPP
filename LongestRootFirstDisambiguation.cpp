@@ -20,7 +20,7 @@ vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmP
         FsmParseList fsmParseList = fsmParses[i];
         string bestRoot;
         string surfaceForm = fsmParseList.getFsmParse(0).getSurfaceForm();
-        if (rootList.find(surfaceForm) != rootList.end()){
+        if (rootList.contains(surfaceForm)){
             bestRoot = rootList[surfaceForm];
         }
         bool rootFound = false;
