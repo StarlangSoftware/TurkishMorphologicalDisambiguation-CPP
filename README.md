@@ -49,7 +49,7 @@ After generating the classification dataset as above, one can use the [Classific
 Video Lectures
 ============
 
-[<img src=https://github.com/StarlangSoftware/TurkishMorphologicalDisambiguation/blob/master/video.jpg width="50%">](https://youtu.be/vhp6Mse1vdM)
+[<img src=https://github.com/StarlangSoftware/TurkishMorphologicalDisambiguation/blob/master/video1.jpg width="50%">](https://youtu.be/vhp6Mse1vdM)
 
 For Developers
 ============
