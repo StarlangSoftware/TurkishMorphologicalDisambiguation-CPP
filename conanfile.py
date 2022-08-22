@@ -7,8 +7,8 @@ class MorphologicalDisambiguationConan(ConanFile):
     requires = ["AnnotatedTree/1.0.0", "NGram/1.0.0"]
     license = "GPL License"
     author = "Olcay Taner Yildiz olcay.yildiz@ozyegin.edu.tr"
-    url = "https://github.com/StarlangSoftware/AnnotatedTree-CPP"
-    description = "Annotated constituency treebank library"
+    url = "https://github.com/StarlangSoftware/TurkishMorphologicalDisambiguation-CPP"
+    description = "Turkish Morphological Disambiguation Library"
     topics = ("")
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
