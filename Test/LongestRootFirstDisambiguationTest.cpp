@@ -6,7 +6,7 @@
 #include "catch.hpp"
 #include "DisambiguatedWord.h"
 #include "DisambiguationCorpus.h"
-#include "../LongestRootFirstDisambiguation.h"
+#include "../src/LongestRootFirstDisambiguation.h"
 
 TEST_CASE("LongestRootFirstDisambiguationTest-testDisambiguation") {
     FsmMorphologicalAnalyzer fsm = FsmMorphologicalAnalyzer();
