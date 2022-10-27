@@ -13,7 +13,7 @@
  * @param fsmParses {@link FsmParseList} to disambiguate.
  * @return correctFsmParses {@link ArrayList} which holds the parses with longest root words.
  */
-vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) {
+vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{
     vector<FsmParse> correctFsmParses;
     FsmParse bestParse;
     for (int i = 0; i < size; i++) {
@@ -21,7 +21,7 @@ vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmP
         string bestRoot;
         string surfaceForm = fsmParseList.getFsmParse(0).getSurfaceForm();
         if (rootList.contains(surfaceForm)){
-            bestRoot = rootList[surfaceForm];
+            bestRoot = rootList.at(surfaceForm);
         }
         bool rootFound = false;
         for (int j = 0; j < fsmParseList.size(); j++) {
@@ -46,11 +46,11 @@ LongestRootFirstDisambiguation::LongestRootFirstDisambiguation() {
     readFromFile("rootList.txt");
 }
 
-LongestRootFirstDisambiguation::LongestRootFirstDisambiguation(string fileName) {
+LongestRootFirstDisambiguation::LongestRootFirstDisambiguation(const string& fileName) {
     readFromFile(fileName);
 }
 
-void LongestRootFirstDisambiguation::readFromFile(string fileName) {
+void LongestRootFirstDisambiguation::readFromFile(const string& fileName) {
     ifstream inputFile;
     string line;
     inputFile.open(fileName, ifstream :: in);

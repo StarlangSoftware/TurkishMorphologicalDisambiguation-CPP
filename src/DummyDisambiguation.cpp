@@ -11,7 +11,7 @@
  * @param fsmParses {@link FsmParseList} to disambiguate.
  * @return correctFsmParses {@link vector}.
  */
-vector<FsmParse> DummyDisambiguation::disambiguate(FsmParseList *fsmParses, int size) {
+vector<FsmParse> DummyDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{
     vector<FsmParse> correctFsmParses;
     for (int i = 0; i < size; i++) {
         FsmParseList fsmParseList = fsmParses[i];

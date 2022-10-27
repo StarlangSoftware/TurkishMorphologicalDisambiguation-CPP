@@ -10,11 +10,11 @@
 class LongestRootFirstDisambiguation: public MorphologicalDisambiguator {
 private:
     map<string, string> rootList;
-    void readFromFile(string fileName);
+    void readFromFile(const string& fileName);
 public:
     LongestRootFirstDisambiguation();
-    explicit LongestRootFirstDisambiguation(string fileName);
-    vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) override;
+    explicit LongestRootFirstDisambiguation(const string& fileName);
+    vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) const override;
 };
 
 

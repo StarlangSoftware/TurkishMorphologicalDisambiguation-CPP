@@ -19,13 +19,13 @@
  *
  * @param corpus {@link DisambiguationCorpus} to train.
  */
-void RootFirstDisambiguation::train(DisambiguationCorpus& corpus) {
+void RootFirstDisambiguation::train(const DisambiguationCorpus& corpus) {
     int i, j;
     Sentence* sentence;
     DisambiguatedWord* word;
     LaplaceSmoothing <string> laplaceSmoothing;
-    auto* words = new string[2];
-    auto* igs = new string[2];
+    vector<string> words = {"", ""};
+    vector<string> igs = {"", ""};
     wordUniGramModel = new NGram<string>(1);
     wordBiGramModel = new NGram<string>(2);
     igUniGramModel = new NGram<string>(1);
@@ -50,11 +50,9 @@ void RootFirstDisambiguation::train(DisambiguationCorpus& corpus) {
     laplaceSmoothing.setProbabilities(*igUniGramModel);
     laplaceSmoothing.setProbabilities(*wordBiGramModel);
     laplaceSmoothing.setProbabilities(*igBiGramModel);
-    delete[] words;
-    delete[] igs;
 }
 
-vector<FsmParse> RootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) {
+vector<FsmParse> RootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{
     int i;
     Word* bestWord;
     FsmParse bestParse;
@@ -78,7 +76,7 @@ vector<FsmParse> RootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, 
  * @param index            Index of FsmParse of which part of speech tag will be used to get the probability.
  * @return The probability of the given word.
  */
-double RootFirstDisambiguation::getWordProbability(string word, vector<FsmParse> correctFsmParses, int index) {
+double RootFirstDisambiguation::getWordProbability(const string& word, const vector<FsmParse>& correctFsmParses, int index) const{
     if (index != 0 && correctFsmParses.size() == index) {
         return wordBiGramModel->getProbability({correctFsmParses.at(index - 1).getWordWithPos()->getName(), word});
     } else {
@@ -94,7 +92,7 @@ double RootFirstDisambiguation::getWordProbability(string word, vector<FsmParse>
  * @param index            Index of FsmParse of which transition list will be used to get the probability.
  * @return The probability of the given word.
  */
-double RootFirstDisambiguation::getIgProbability(string word, vector<FsmParse> correctFsmParses, int index) {
+double RootFirstDisambiguation::getIgProbability(const string& word, const vector<FsmParse>& correctFsmParses, int index) const{
     if (index != 0 && correctFsmParses.size() == index) {
         return igBiGramModel->getProbability({correctFsmParses.at(index - 1).getTransitionList(), word});
     } else {
@@ -110,7 +108,7 @@ double RootFirstDisambiguation::getIgProbability(string word, vector<FsmParse> c
  * @param fsmParseList {@link FsmParseList} is used to get the part of speech tags and transition lists of words.
  * @return The word with the highest probability.
  */
-Word* RootFirstDisambiguation::getBestRootWord(FsmParseList fsmParseList) {
+Word* RootFirstDisambiguation::getBestRootWord(const FsmParseList& fsmParseList) const{
     double bestProbability, probability;
     Word* bestWord = nullptr;
     bestProbability = -INT_MAX;
@@ -138,8 +136,8 @@ Word* RootFirstDisambiguation::getBestRootWord(FsmParseList fsmParseList) {
  * @return The parse with the highest probability.
  */
 FsmParse
-RootFirstDisambiguation::getParseWithBestIgProbability(FsmParseList parseList, vector<FsmParse> correctFsmParses,
-                                                       int index) {
+RootFirstDisambiguation::getParseWithBestIgProbability(const FsmParseList& parseList, const vector<FsmParse>& correctFsmParses,
+                                                       int index) const{
     double bestProbability, probability;
     FsmParse bestParse;
     bestProbability = -INT_MAX;

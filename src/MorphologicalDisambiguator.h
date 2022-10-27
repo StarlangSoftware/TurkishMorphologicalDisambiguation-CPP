@@ -24,7 +24,7 @@ public:
      * @param fsmParses {@link FsmParseList} to disambiguate.
      * @return ArrayList of {@link FsmParse}.
      */
-    virtual vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) = 0;
+    virtual vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) const = 0;
 
     /**
      * Method to save a model.

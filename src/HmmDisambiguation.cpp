@@ -21,8 +21,8 @@ void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
     Sentence* sentence;
     DisambiguatedWord* word, *nextWord;
     LaplaceSmoothing <string> laplaceSmoothing;
-    auto* words = new string[2];
-    auto* igs = new string[2];
+    vector<string> words = {"", ""};
+    vector<string> igs = {"", ""};
     wordUniGramModel = new NGram<string>(1);
     igUniGramModel = new NGram<string>(1);
     wordBiGramModel = new NGram<string>(2);
@@ -49,8 +49,6 @@ void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
     laplaceSmoothing.setProbabilities(*igUniGramModel);
     laplaceSmoothing.setProbabilities(*wordBiGramModel);
     laplaceSmoothing.setProbabilities(*igBiGramModel);
-    delete[] words;
-    delete[] igs;
 }
 
 /**
@@ -61,7 +59,7 @@ void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
  * @param fsmParses {@link FsmParseList} to disambiguate.
  * @return ArrayList of FsmParses.
  */
-vector<FsmParse> HmmDisambiguation::disambiguate(FsmParseList *fsmParses, int size) {
+vector<FsmParse> HmmDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{
     int i, j, k, t, bestIndex;
     double probability, bestProbability;
     string w1, w2, ig1, ig2;
@@ -71,7 +69,7 @@ vector<FsmParse> HmmDisambiguation::disambiguate(FsmParseList *fsmParses, int si
         }
     }
     vector<FsmParse> correctFsmParses;
-    double** probabilities = new double*[size];
+    auto** probabilities = new double*[size];
     int** best = new int*[size];
     for (i = 0; i < size; i++) {
         probabilities[i] = new double[fsmParses[i].size()];

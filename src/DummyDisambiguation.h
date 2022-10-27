@@ -10,7 +10,7 @@
 
 class DummyDisambiguation : public MorphologicalDisambiguator {
 public:
-    vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) override;
+    vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) const override;
 };
 
 

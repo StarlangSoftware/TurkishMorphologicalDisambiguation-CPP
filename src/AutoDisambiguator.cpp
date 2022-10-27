@@ -6,7 +6,7 @@
 #include "Dictionary/Word.h"
 #include "CounterHashMap.h"
 
-bool AutoDisambiguator::isAnyWordSecondPerson(int index, vector<FsmParse> correctParses) {
+bool AutoDisambiguator::isAnyWordSecondPerson(int index, const vector<FsmParse>& correctParses) {
     int count = 0;
     for (int i = index - 1; i >= 0; i--) {
         if (correctParses[i].containsTag(MorphologicalTag::A2SG) || correctParses[i].containsTag(MorphologicalTag::P2SG)) {
@@ -16,7 +16,7 @@ bool AutoDisambiguator::isAnyWordSecondPerson(int index, vector<FsmParse> correc
     return count >= 1;
 }
 
-bool AutoDisambiguator::isPossessivePlural(int index, vector<FsmParse> correctParses) {
+bool AutoDisambiguator::isPossessivePlural(int index, const vector<FsmParse>& correctParses) {
     for (int i = index - 1; i >= 0; i--) {
         if (correctParses[i].isNoun()) {
             return correctParses[i].isPlural();
@@ -25,7 +25,7 @@ bool AutoDisambiguator::isPossessivePlural(int index, vector<FsmParse> correctPa
     return false;
 }
 
-string AutoDisambiguator::nextWordPos(FsmParseList nextParseList) {
+string AutoDisambiguator::nextWordPos(const FsmParseList& nextParseList) {
     CounterHashMap<string> map = CounterHashMap<string>();
     for (int i = 0; i < nextParseList.size(); i++) {
         map.put(nextParseList.getFsmParse(i).getPos());
@@ -57,7 +57,7 @@ bool AutoDisambiguator::isFirstWord(int index) {
     return index == 0;
 }
 
-bool AutoDisambiguator::containsTwoNeOrYa(FsmParseList *fsmParses, string word, int length) {
+bool AutoDisambiguator::containsTwoNeOrYa(FsmParseList *fsmParses, const string& word, int length) {
     int count = 0;
     for (int i = 0; i < length; i++) {
         string surfaceForm = fsmParses[i].getFsmParse(0).getSurfaceForm();
@@ -68,12 +68,12 @@ bool AutoDisambiguator::containsTwoNeOrYa(FsmParseList *fsmParses, string word, 
     return count == 2;
 }
 
-bool AutoDisambiguator::hasPreviousWordTag(int index, vector<FsmParse> correctParses, MorphologicalTag tag) {
+bool AutoDisambiguator::hasPreviousWordTag(int index, const vector<FsmParse>& correctParses, MorphologicalTag tag) {
     return index > 0 && correctParses.at(index - 1).containsTag(tag);
 }
 
-string AutoDisambiguator::selectCaseForParseString(string parseString, int index, FsmParseList *fsmParses,
-                                                   vector<FsmParse> correctParses, int length) {
+string AutoDisambiguator::selectCaseForParseString(const string& parseString, int index, FsmParseList *fsmParses,
+                                                   const vector<FsmParse>& correctParses, int length) {
     string surfaceForm = fsmParses[index].getFsmParse(0).getSurfaceForm();
     string root = fsmParses[index].getFsmParse(0).getWord()->getName();
     string lastWord = fsmParses[length - 1].getFsmParse(0).getSurfaceForm();
@@ -1204,7 +1204,7 @@ string AutoDisambiguator::selectCaseForParseString(string parseString, int index
 }
 
 FsmParse
-AutoDisambiguator::caseDisambiguator(int index, FsmParseList *fsmParses, vector<FsmParse> correctParses, int length) {
+AutoDisambiguator::caseDisambiguator(int index, FsmParseList *fsmParses, const vector<FsmParse>& correctParses, int length) {
     FsmParseList fsmParseList = fsmParses[index];
     string caseString = fsmParses[index].parsesWithoutPrefixAndSuffix();
     string defaultCase = selectCaseForParseString(caseString, index, fsmParses, correctParses, length);

@@ -11,12 +11,12 @@
 
 class TurkishSentenceAutoDisambiguator : public SentenceAutoDisambiguator{
 public:
-    TurkishSentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer);
+    TurkishSentenceAutoDisambiguator(const FsmMorphologicalAnalyzer& morphologicalAnalyzer);
 protected:
     void autoDisambiguateMultipleRootWords(AnnotatedSentence* sentence) override;
 private:
     LongestRootFirstDisambiguation longestRootFirstDisambiguation;
-    void setParseAutomatically(FsmParse disambiguatedParse, AnnotatedWord* word);
+    void setParseAutomatically(const FsmParse& disambiguatedParse, AnnotatedWord* word);
 };
 
 

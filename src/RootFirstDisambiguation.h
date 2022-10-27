@@ -12,14 +12,14 @@ class RootFirstDisambiguation : public NaiveDisambiguation {
 protected:
     NGram<string>* wordBiGramModel;
     NGram<string>* igBiGramModel;
-    double getWordProbability(string word, vector<FsmParse> correctFsmParses, int index);
-    double getIgProbability(string word, vector<FsmParse> correctFsmParses, int index);
-    Word* getBestRootWord(FsmParseList fsmParseList);
-    FsmParse getParseWithBestIgProbability(FsmParseList parseList, vector<FsmParse> correctFsmParses, int index);
+    double getWordProbability(const string& word, const vector<FsmParse>& correctFsmParses, int index) const;
+    double getIgProbability(const string& word, const vector<FsmParse>& correctFsmParses, int index) const;
+    Word* getBestRootWord(const FsmParseList& fsmParseList) const;
+    FsmParse getParseWithBestIgProbability(const FsmParseList& parseList, const vector<FsmParse>& correctFsmParses, int index) const;
 public:
     ~RootFirstDisambiguation();
-    void train(DisambiguationCorpus& corpus);
-    vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) override;
+    void train(const DisambiguationCorpus& corpus);
+    vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) const override;
     void saveModel();
     void loadModel();
 };

@@ -30,6 +30,6 @@ TEST_CASE("DummyDisambiguationTest-testDisambiguation") {
             }
         }
     }
-    REQUIRE_THAT(0.8473, Catch::Matchers::WithinAbs((correctRoot + 0.0) / corpus.numberOfWords(), 0.002));
-    REQUIRE_THAT(0.6901, Catch::Matchers::WithinAbs((correctParse + 0.0) / corpus.numberOfWords(), 0.002));
+    REQUIRE_THAT(0.8572, Catch::Matchers::WithinAbs((correctRoot + 0.0) / corpus.numberOfWords(), 0.002));
+    REQUIRE_THAT(0.6996, Catch::Matchers::WithinAbs((correctParse + 0.0) / corpus.numberOfWords(), 0.002));
 }

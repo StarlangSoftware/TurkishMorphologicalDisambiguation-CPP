@@ -11,7 +11,7 @@
  *                           `günü': 2 possible root words `gün' and `günü'
  *                           `çağlar' : 2 possible root words `çağ' and `çağlar'
  */
-TurkishSentenceAutoDisambiguator::TurkishSentenceAutoDisambiguator(FsmMorphologicalAnalyzer& morphologicalAnalyzer) : SentenceAutoDisambiguator(morphologicalAnalyzer) {
+TurkishSentenceAutoDisambiguator::TurkishSentenceAutoDisambiguator(const FsmMorphologicalAnalyzer& morphologicalAnalyzer) : SentenceAutoDisambiguator(morphologicalAnalyzer) {
 }
 
 /**
@@ -20,7 +20,7 @@ TurkishSentenceAutoDisambiguator::TurkishSentenceAutoDisambiguator(FsmMorphologi
  * @param fsmParseList Morphological parses of the word.
  * @param word Word to be disambiguated.
  */
-void TurkishSentenceAutoDisambiguator::setParseAutomatically(FsmParse disambiguatedParse, AnnotatedWord* word) {
+void TurkishSentenceAutoDisambiguator::setParseAutomatically(const FsmParse& disambiguatedParse, AnnotatedWord* word) {
     word->setParse(disambiguatedParse.transitionlist());
     word->setMetamorphicParse(disambiguatedParse.getWithList());
 }
