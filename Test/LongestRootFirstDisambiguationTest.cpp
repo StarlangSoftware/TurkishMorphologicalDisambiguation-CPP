@@ -29,6 +29,6 @@ TEST_CASE("LongestRootFirstDisambiguationTest-testDisambiguation") {
             }
         }
     }
-    REQUIRE_THAT(0.9165, Catch::Matchers::WithinAbs((correctRoot + 0.0) / corpus.numberOfWords(), 0.002));
+    REQUIRE_THAT(0.9186, Catch::Matchers::WithinAbs((correctRoot + 0.0) / corpus.numberOfWords(), 0.002));
     REQUIRE_THAT(0.8347, Catch::Matchers::WithinAbs((correctParse + 0.0) / corpus.numberOfWords(), 0.002));
 }
