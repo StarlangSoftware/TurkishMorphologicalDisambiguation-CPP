@@ -11,13 +11,13 @@
  * sentences from given corpus and gets each word as a DisambiguatedWord. Then, adds the word together with its part of speech
  * tags to the wordUniGramModel. It also gets the transition list of that word and adds it to the igUniGramModel.
  * <p>
- * If there exists a next word in the sentence, it adds the current and next {@link DisambiguatedWord} to the wordBiGramModel with
+ * If there exists a next word in the sentence, it adds the current and next DisambiguatedWord to the wordBiGramModel with
  * their part of speech tags. It also adds them to the igBiGramModel with their transition lists.
  * <p>
  * At the end, it calculates the NGram probabilities of both word and ig unigram models by using LaplaceSmoothing, and
  * both word and ig bigram models by using InterpolatedSmoothing.
  *
- * @param corpus {@link DisambiguationCorpus} to train.
+ * @param corpus DisambiguationCorpus to train.
  */
 void RootFirstDisambiguation::train(const DisambiguationCorpus& corpus) {
     int i, j;
@@ -101,11 +101,11 @@ double RootFirstDisambiguation::getIgProbability(const string& word, const vecto
 }
 
 /**
- * The getBestRootWord method takes a {@link FsmParseList} as an input and loops through the list. It gets each word with its
- * part of speech tags as a new {@link Word} word and its transition list as a {@link Word} ig. Then, finds their corresponding
+ * The getBestRootWord method takes a FsmParseList as an input and loops through the list. It gets each word with its
+ * part of speech tags as a new Word word and its transition list as a Word ig. Then, finds their corresponding
  * probabilities. At the end returns the word with the highest probability.
  *
- * @param fsmParseList {@link FsmParseList} is used to get the part of speech tags and transition lists of words.
+ * @param fsmParseList FsmParseList is used to get the part of speech tags and transition lists of words.
  * @return The word with the highest probability.
  */
 Word* RootFirstDisambiguation::getBestRootWord(const FsmParseList& fsmParseList) const{
@@ -127,10 +127,10 @@ Word* RootFirstDisambiguation::getBestRootWord(const FsmParseList& fsmParseList)
 }
 
 /**
- * The getParseWithBestIgProbability gets each {@link FsmParse}'s transition list as a {@link Word} ig. Then, finds the corresponding
+ * The getParseWithBestIgProbability gets each FsmParse's transition list as a Word ig. Then, finds the corresponding
  * probabilitt. At the end returns the parse with the highest ig probability.
  *
- * @param parseList        {@link FsmParseList} is used to get the {@link FsmParse}.
+ * @param parseList        FsmParseList is used to get the FsmParse.
  * @param correctFsmParses FsmParse is used to get the transition lists.
  * @param index            Index of FsmParse of which transition list will be used to get the probability.
  * @return The parse with the highest probability.

@@ -8,10 +8,10 @@
 /**
  * The disambiguate method gets an array of fsmParses. Then loops through that parses and finds the longest root
  * word. At the end, gets the parse with longest word among the fsmParses and adds it to the correctFsmParses
- * {@link ArrayList}.
+ * ArrayList.
  *
- * @param fsmParses {@link FsmParseList} to disambiguate.
- * @return correctFsmParses {@link ArrayList} which holds the parses with longest root words.
+ * @param fsmParses FsmParseList to disambiguate.
+ * @return correctFsmParses ArrayList which holds the parses with longest root words.
  */
 vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{
     vector<FsmParse> correctFsmParses;
