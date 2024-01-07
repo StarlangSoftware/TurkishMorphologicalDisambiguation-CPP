@@ -34,14 +34,14 @@ void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
             nextWord = (DisambiguatedWord*) sentence->getWord(j + 1);
             words[0] = word->getParse().getWordWithPos()->getName();
             words[1] = nextWord->getParse().getWordWithPos()->getName();
-            wordUniGramModel->addNGram(words, 2);
+            wordUniGramModel->addNGram(words, 1);
             wordBiGramModel->addNGram(words, 2);
             for (k = 0; k < nextWord->getParse().size(); k++) {
                 igs[0] = word->getParse().getLastInflectionalGroup().to_String();
                 igs[1] = nextWord->getParse().getInflectionalGroup(k).to_String();
                 igBiGramModel->addNGram(igs, 2);
                 igs[0] = igs[1];
-                igUniGramModel->addNGram(igs, 2);
+                igUniGramModel->addNGram(igs, 1);
             }
         }
     }

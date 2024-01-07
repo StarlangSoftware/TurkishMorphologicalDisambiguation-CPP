@@ -35,9 +35,9 @@ void RootFirstDisambiguation::train(const DisambiguationCorpus& corpus) {
         for (j = 0; j < sentence->wordCount(); j++) {
             word = (DisambiguatedWord*) sentence->getWord(j);
             words[0] = word->getParse().getWordWithPos()->getName();
-            wordUniGramModel->addNGram(words, 2);
+            wordUniGramModel->addNGram(words, 1);
             igs[0] = word->getParse().getTransitionList();
-            igUniGramModel->addNGram(igs, 2);
+            igUniGramModel->addNGram(igs, 1);
             if (j + 1 < sentence->wordCount()) {
                 words[1] = ((DisambiguatedWord*) sentence->getWord(j + 1))->getParse().getWordWithPos()->getName();
                 wordBiGramModel->addNGram(words, 2);
