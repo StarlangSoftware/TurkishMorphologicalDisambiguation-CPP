@@ -52,6 +52,15 @@ void RootFirstDisambiguation::train(const DisambiguationCorpus& corpus) {
     laplaceSmoothing.setProbabilities(*igBiGramModel);
 }
 
+/**
+ * The disambiguate method gets an array of fsmParses. Then loops through that parses and finds the most probable root
+ * word and removes the other words which are identical to the most probable root word. At the end, gets the most probable parse
+ * among the fsmParses and adds it to the correctFsmParses {@link ArrayList}.
+ *
+ * @param fsmParses {@link FsmParseList} to disambiguate.
+ * @param size Length of the sentence
+ * @return correctFsmParses {@link ArrayList} which holds the most probable parses.
+ */
 vector<FsmParse> RootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{
     int i;
     Word* bestWord;
@@ -152,6 +161,9 @@ RootFirstDisambiguation::getParseWithBestIgProbability(const FsmParseList& parse
     return bestParse;
 }
 
+/**
+ * Method to load unigrams and bigrams.
+ */
 void RootFirstDisambiguation::loadModel() {
     NaiveDisambiguation::loadModel();
     ifstream inputFile;
@@ -163,6 +175,9 @@ void RootFirstDisambiguation::loadModel() {
     inputFile.close();
 }
 
+/**
+ * Method to save unigrams and bigrams.
+ */
 void RootFirstDisambiguation::saveModel() {
     NaiveDisambiguation::saveModel();
     ofstream outputFile;

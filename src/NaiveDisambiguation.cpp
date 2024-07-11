@@ -4,6 +4,10 @@
 
 #include "NaiveDisambiguation.h"
 
+/**
+ * The saveModel method writes the specified objects i.e wordUniGramModel and igUniGramModel to the
+ * words1.txt and igs1.txt.
+ */
 void NaiveDisambiguation::saveModel() {
     ofstream outputFile;
     outputFile.open("words.1gram", ostream::out);
@@ -14,6 +18,9 @@ void NaiveDisambiguation::saveModel() {
     outputFile.close();
 }
 
+/**
+ * The loadModel method reads objects at the words1.txt and igs1.txt to the wordUniGramModel and igUniGramModel.
+ */
 void NaiveDisambiguation::loadModel() {
     ifstream inputFile;
     inputFile.open("words.1gram", istream::in);

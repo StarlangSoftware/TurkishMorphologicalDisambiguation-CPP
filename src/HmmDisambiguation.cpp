@@ -131,6 +131,9 @@ vector<FsmParse> HmmDisambiguation::disambiguate(FsmParseList *fsmParses, int si
     return correctFsmParses;
 }
 
+/**
+ * Method to load unigrams and bigrams.
+ */
 void HmmDisambiguation::loadModel() {
     NaiveDisambiguation::loadModel();
     ifstream inputFile;
@@ -142,6 +145,9 @@ void HmmDisambiguation::loadModel() {
     inputFile.close();
 }
 
+/**
+ * Method to save unigrams and bigrams.
+ */
 void HmmDisambiguation::saveModel() {
     NaiveDisambiguation::saveModel();
     ofstream outputFile;

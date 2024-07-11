@@ -6,6 +6,14 @@
 #include "Dictionary/Word.h"
 #include "CounterHashMap.h"
 
+/**
+ * Checks if there is any singular second person agreement or possessor tag before the current word at position
+ * index.
+ * @param index Position of the current word.
+ * @param correctParses All correct morphological parses of the previous words.
+ * @return True, if at least one of the morphological parses of the previous words has a singular second person
+ * agreement or possessor tag, false otherwise.
+ */
 bool AutoDisambiguator::isAnyWordSecondPerson(int index, const vector<FsmParse>& correctParses) {
     int count = 0;
     for (int i = index - 1; i >= 0; i--) {
@@ -16,6 +24,13 @@ bool AutoDisambiguator::isAnyWordSecondPerson(int index, const vector<FsmParse>&
     return count >= 1;
 }
 
+/**
+ * Checks if there is any plural agreement or possessor tag before the current word at position index.
+ * @param index Position of the current word.
+ * @param correctParses All correct morphological parses of the previous words.
+ * @return True, if at least one of the morphological parses of the previous words has a plural agreement or
+ * possessor tag, false otherwise.
+ */
 bool AutoDisambiguator::isPossessivePlural(int index, const vector<FsmParse>& correctParses) {
     for (int i = index - 1; i >= 0; i--) {
         if (correctParses[i].isNoun()) {
@@ -25,6 +40,11 @@ bool AutoDisambiguator::isPossessivePlural(int index, const vector<FsmParse>& co
     return false;
 }
 
+/**
+ * Given all possible parses of the next word, this method returns the most frequent pos tag.
+ * @param nextParseList All possible parses of the next word.
+ * @return Most frequent pos tag in all possible parses of the next word.
+ */
 string AutoDisambiguator::nextWordPos(const FsmParseList& nextParseList) {
     CounterHashMap<string> map = CounterHashMap<string>();
     for (int i = 0; i < nextParseList.size(); i++) {
@@ -33,30 +53,73 @@ string AutoDisambiguator::nextWordPos(const FsmParseList& nextParseList) {
     return map.max();
 }
 
+/**
+ * Checks if the current word is just before the last word.
+ * @param index Position of the current word.
+ * @param length Length of the sentence.
+ * @return True, if the current word is just before the last word, false otherwise.
+ */
 bool AutoDisambiguator::isBeforeLastWord(int index, int length) {
     return index + 2 == length;
 }
 
+/**
+ * Checks if there is at least one word after the current word.
+ * @param index Position of the current word.
+ * @param length Length of the sentence.
+ * @return True, if there is at least one word after the current word, false otherwise.
+ */
 bool AutoDisambiguator::nextWordExists(int index, int length) {
     return index + 1 < length;
 }
 
+/**
+ * Checks if there is at least one word after the current word and that next word is a noun.
+ * @param index Position of the current word.
+ * @param fsmParses All morphological parses of the current sentence.
+ * @return True, if there is at least one word after the current word and that next word is a noun, false otherwise.
+ */
 bool AutoDisambiguator::isNextWordNoun(int index, FsmParseList *fsmParses, int length) {
     return index + 1 < length && nextWordPos(fsmParses[index + 1]) == "NOUN";
 }
 
+/**
+ * Checks if there is at least one word after the current word and that next word is a number.
+ * @param index Position of the current word.
+ * @param fsmParses All morphological parses of the current sentence.
+ * @return True, if there is at least one word after the current word and that next word is a number, false
+ * otherwise.
+ */
 bool AutoDisambiguator::isNextWordNum(int index, FsmParseList *fsmParses, int length) {
     return index + 1 < length && nextWordPos(fsmParses[index + 1]) == "NUM";
 }
 
+/**
+ * Checks if there is at least one word after the current word and that next word is a noun or adjective.
+ * @param index Position of the current word.
+ * @param fsmParses All morphological parses of the current sentence.
+ * @return True, if there is at least one word after the current word and that next word is a noun or adjective,
+ * false otherwise.
+ */
 bool AutoDisambiguator::isNextWordNounOrAdjective(int index, FsmParseList *fsmParses, int length) {
     return index + 1 < length && (nextWordPos(fsmParses[index + 1]) == "NOUN" || nextWordPos(fsmParses[index + 1]) == "ADJ" || nextWordPos(fsmParses[index + 1]) == "DET");
 }
 
+/**
+ * Checks if the current word is the first word of the sentence or not.
+ * @param index Position of the current word.
+ * @return True, if the current word is the first word of the sentence, false otherwise.
+ */
 bool AutoDisambiguator::isFirstWord(int index) {
     return index == 0;
 }
 
+/**
+ * Checks if there are at least two occurrences of 'ne', 'ya' or 'gerek' in the sentence.
+ * @param fsmParses All morphological parses of the current sentence.
+ * @param word 'ne', 'ya' or 'gerek'
+ * @return True, if there are at least two occurrences of 'ne', 'ya' or 'gerek' in the sentence, false otherwise.
+ */
 bool AutoDisambiguator::containsTwoNeOrYa(FsmParseList *fsmParses, const string& word, int length) {
     int count = 0;
     for (int i = 0; i < length; i++) {
@@ -68,10 +131,29 @@ bool AutoDisambiguator::containsTwoNeOrYa(FsmParseList *fsmParses, const string&
     return count == 2;
 }
 
+/**
+ * Checks if there is at least one word before the given word and its pos tag is the given pos tag.
+ * @param index Position of the current word.
+ * @param correctParses All correct morphological parses of the previous words.
+ * @param tag Pos tag of the previous word
+ * @return True, if there is at least one word before the given word and its pos tag is the given pos tag, false
+ * otherwise.
+ */
 bool AutoDisambiguator::hasPreviousWordTag(int index, const vector<FsmParse>& correctParses, MorphologicalTag tag) {
     return index > 0 && correctParses.at(index - 1).containsTag(tag);
 }
 
+/**
+ * Given the disambiguation parse string, position of the current word in the sentence, all morphological parses of
+ * all words in the sentence and all correct morphological parses of the previous words, the algorithm determines
+ * the correct morphological parse of the current word in rule based manner.
+ * @param parseString Disambiguation parse string. The string contains distinct subparses for the given word for a
+ *                    determined root word. The subparses are separated with '$'.
+ * @param index Position of the current word.
+ * @param fsmParses All morphological parses of the current sentence.
+ * @param correctParses All correct morphological parses of the previous words.
+ * @return Correct morphological subparse of the current word.
+ */
 string AutoDisambiguator::selectCaseForParseString(const string& parseString, int index, FsmParseList *fsmParses,
                                                    const vector<FsmParse>& correctParses, int length) {
     string surfaceForm = fsmParses[index].getFsmParse(0).getSurfaceForm();
@@ -1203,6 +1285,15 @@ string AutoDisambiguator::selectCaseForParseString(const string& parseString, in
     return "";
 }
 
+/**
+ * Given the position of the current word in the sentence, all morphological parses of all words in the sentence and
+ * all correct morphological parses of the previous words, the algorithm determines the correct morphological parse
+ * of the current word in rule based manner.
+ * @param index Position of the current word.
+ * @param fsmParses All morphological parses of the current sentence.
+ * @param correctParses All correct morphological parses of the previous words.
+ * @return Correct morphological parse of the current word.
+ */
 FsmParse
 AutoDisambiguator::caseDisambiguator(int index, FsmParseList *fsmParses, const vector<FsmParse>& correctParses, int length) {
     FsmParseList fsmParseList = fsmParses[index];
