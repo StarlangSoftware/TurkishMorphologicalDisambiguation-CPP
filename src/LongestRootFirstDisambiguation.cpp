@@ -4,6 +4,7 @@
 
 #include "LongestRootFirstDisambiguation.h"
 #include "AutoDisambiguator.h"
+#include "StringUtils.h"
 
 /**
  * The disambiguate method gets an array of fsmParses. Then loops through that parses and finds the longest root
@@ -69,7 +70,7 @@ void LongestRootFirstDisambiguation::readFromFile(const string& fileName) {
     inputFile.open(fileName, ifstream :: in);
     while (inputFile.good()) {
         getline(inputFile, line);
-        vector<string> tokens = Word::split(line);
+        vector<string> tokens = StringUtils::split(line);
         if (tokens.size() == 2) {
             rootList.insert_or_assign(tokens[0], tokens[1]);
         }
