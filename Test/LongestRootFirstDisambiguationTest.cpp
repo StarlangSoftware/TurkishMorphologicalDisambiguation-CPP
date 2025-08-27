@@ -29,6 +29,6 @@ TEST_CASE("LongestRootFirstDisambiguationTest-testDisambiguation") {
             }
         }
     }
-    cout << (correctRoot + 0.0) / corpus.numberOfWords();
-    cout << (correctParse + 0.0) / corpus.numberOfWords();
+    cout << (correctRoot + 0.0) / corpus.numberOfWords() << endl;
+    cout << (correctParse + 0.0) / corpus.numberOfWords() << endl;
 }
