@@ -3,6 +3,9 @@
 //
 
 #include "RootFirstDisambiguation.h"
+
+#include <climits>
+
 #include "DisambiguatedWord.h"
 #include "LaplaceSmoothing.h"
 
