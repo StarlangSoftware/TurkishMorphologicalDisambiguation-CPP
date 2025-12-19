@@ -11,7 +11,7 @@
 
 class TurkishSentenceAutoDisambiguator : public SentenceAutoDisambiguator{
 public:
-    TurkishSentenceAutoDisambiguator(const FsmMorphologicalAnalyzer& morphologicalAnalyzer);
+    explicit TurkishSentenceAutoDisambiguator(const FsmMorphologicalAnalyzer& morphologicalAnalyzer);
 protected:
     void autoDisambiguateMultipleRootWords(AnnotatedSentence* sentence) override;
 private:

@@ -20,7 +20,7 @@ public:
     ~RootFirstDisambiguation();
     void train(const DisambiguationCorpus& corpus);
     vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) const override;
-    void saveModel();
+    void saveModel() const;
     void loadModel();
 };
 

@@ -14,7 +14,7 @@ protected:
     NGram<string>* igBiGramModel;
 public:
     ~HmmDisambiguation();
-    void train(DisambiguationCorpus& corpus);
+    void train(const DisambiguationCorpus& corpus);
     vector<FsmParse> disambiguate(FsmParseList* fsmParses, int size) const override;
     void saveModel();
     void loadModel();

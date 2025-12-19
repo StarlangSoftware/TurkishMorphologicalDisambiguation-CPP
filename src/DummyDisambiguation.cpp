@@ -9,6 +9,7 @@
  * size is greater than 0, it adds a random parse of this list to the correctFsmParses vector.
  *
  * @param fsmParses FsmParseList to disambiguate.
+ * @param size Size of the fsmParses
  * @return correctFsmParses vector.
  */
 vector<FsmParse> DummyDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{

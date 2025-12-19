@@ -55,11 +55,11 @@ void RootFirstDisambiguation::train(const DisambiguationCorpus& corpus) {
 /**
  * The disambiguate method gets an array of fsmParses. Then loops through that parses and finds the most probable root
  * word and removes the other words which are identical to the most probable root word. At the end, gets the most probable parse
- * among the fsmParses and adds it to the correctFsmParses {@link ArrayList}.
+ * among the fsmParses and adds it to the correctFsmParses.
  *
  * @param fsmParses {@link FsmParseList} to disambiguate.
  * @param size Length of the sentence
- * @return correctFsmParses {@link ArrayList} which holds the most probable parses.
+ * @return correctFsmParses which holds the most probable parses.
  */
 vector<FsmParse> RootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{
     int i;
@@ -178,7 +178,7 @@ void RootFirstDisambiguation::loadModel() {
 /**
  * Method to save unigrams and bigrams.
  */
-void RootFirstDisambiguation::saveModel() {
+void RootFirstDisambiguation::saveModel() const {
     NaiveDisambiguation::saveModel();
     ofstream outputFile;
     outputFile.open("words.2gram", ostream::out);

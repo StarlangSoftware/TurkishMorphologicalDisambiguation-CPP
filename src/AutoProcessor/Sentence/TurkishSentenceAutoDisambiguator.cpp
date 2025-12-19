@@ -6,10 +6,6 @@
 
 /**
  * Constructor for the class.
- * @param rootWordStatistics The object contains information about the selected correct root words in a corpus for a set
- *                           of possible lemma. For example, the lemma
- *                           `günü': 2 possible root words `gün' and `günü'
- *                           `çağlar' : 2 possible root words `çağ' and `çağlar'
  */
 TurkishSentenceAutoDisambiguator::TurkishSentenceAutoDisambiguator(const FsmMorphologicalAnalyzer& morphologicalAnalyzer) : SentenceAutoDisambiguator(morphologicalAnalyzer) {
 }
@@ -17,7 +13,7 @@ TurkishSentenceAutoDisambiguator::TurkishSentenceAutoDisambiguator(const FsmMorp
 /**
  * If the words has only single root in its possible parses, the method disambiguates by looking special cases.
  * The cases are implemented in the caseDisambiguator method.
- * @param fsmParseList Morphological parses of the word.
+ * @param disambiguatedParse Parse used in setting the parse.
  * @param word Word to be disambiguated.
  */
 void TurkishSentenceAutoDisambiguator::setParseAutomatically(const FsmParse& disambiguatedParse, AnnotatedWord* word) {

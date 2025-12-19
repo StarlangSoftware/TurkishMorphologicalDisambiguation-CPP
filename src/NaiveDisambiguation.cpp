@@ -8,7 +8,7 @@
  * The saveModel method writes the specified objects i.e wordUniGramModel and igUniGramModel to the
  * words1.txt and igs1.txt.
  */
-void NaiveDisambiguation::saveModel() {
+void NaiveDisambiguation::saveModel() const {
     ofstream outputFile;
     outputFile.open("words.1gram", ostream::out);
     wordUniGramModel->serialize(outputFile);

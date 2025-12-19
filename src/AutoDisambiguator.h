@@ -16,11 +16,11 @@ private:
     static string nextWordPos(const FsmParseList& nextParseList);
     static bool isBeforeLastWord(int index, int length);
     static bool nextWordExists(int index, int length);
-    static bool isNextWordNoun(int index, FsmParseList* fsmParses, int length);
-    static bool isNextWordNum(int index, FsmParseList* fsmParses, int length);
-    static bool isNextWordNounOrAdjective(int index, FsmParseList* fsmParses, int length);
+    static bool isNextWordNoun(int index, const FsmParseList* fsmParses, int length);
+    static bool isNextWordNum(int index, const FsmParseList* fsmParses, int length);
+    static bool isNextWordNounOrAdjective(int index, const FsmParseList* fsmParses, int length);
     static bool isFirstWord(int index);
-    static bool containsTwoNeOrYa(FsmParseList* fsmParses, const string& word, int length);
+    static bool containsTwoNeOrYa(const FsmParseList* fsmParses, const string& word, int length);
     static bool hasPreviousWordTag(int index, const vector<FsmParse>& correctParses, MorphologicalTag tag);
     static string selectCaseForParseString(const string& parseString, int index, FsmParseList* fsmParses, const vector<FsmParse>& correctParses, int length);
 public:

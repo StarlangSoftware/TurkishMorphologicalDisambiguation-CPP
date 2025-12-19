@@ -16,7 +16,7 @@
  *
  * @param corpus DisambiguationCorpus to train.
  */
-void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
+void HmmDisambiguation::train(const DisambiguationCorpus& corpus) {
     int i, j, k;
     Sentence* sentence;
     DisambiguatedWord* word, *nextWord;
@@ -57,6 +57,7 @@ void HmmDisambiguation::train(DisambiguationCorpus& corpus) {
  * Also by taking into consideration the parses of these word it recalculates the probabilities and returns these parses.
  *
  * @param fsmParses FsmParseList to disambiguate.
+ * @param size Size of the fsmParses
  * @return ArrayList of FsmParses.
  */
 vector<FsmParse> HmmDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{

@@ -15,7 +15,7 @@ protected:
     NGram<string>* igUniGramModel;
 public:
     ~NaiveDisambiguation();
-    void saveModel();
+    void saveModel() const;
     void loadModel();
 };
 

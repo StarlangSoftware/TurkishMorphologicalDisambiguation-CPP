@@ -12,6 +12,7 @@
  * ArrayList.
  *
  * @param fsmParses FsmParseList to disambiguate.
+ * @param size Size of the fsmParses
  * @return correctFsmParses ArrayList which holds the parses with longest root words.
  */
 vector<FsmParse> LongestRootFirstDisambiguation::disambiguate(FsmParseList *fsmParses, int size) const{
